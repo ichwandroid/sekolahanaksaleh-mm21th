@@ -1,14 +1,30 @@
-
-// Initialize Supabase - USER MUST REPLACE THESE VALUES
-const SUPABASE_URL = 'https://gduolkjqwodzrvrgzcrm.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkdW9sa2tqcXdvZHpydmd6Y3JtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTU1NzQsImV4cCI6MjA4NDAzMTU3NH0.TJoNbBk7FPmp_U03IXTsW62XvmhG7cBurinZdoSUzz0';
-
+import { SUPABASE_URL, SUPABASE_KEY } from './supabase-config.js';
 // Check if variables are set
-if (SUPABASE_URL === 'https://gduolkjqwodzrvrgzcrm.supabase.co') {
+if (!SUPABASE_URL || !SUPABASE_KEY) {
     console.warn('Supabase URL and Key not set in js/registration.js');
 }
 
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+// Connection Test
+// Connection Test
+if (supabase) {
+    console.log('Testing Supabase Connection...');
+    supabase.from('registrations').select('count', { count: 'exact', head: true })
+        .then(({ count, error }) => {
+            if (error) {
+                console.error('Supabase Connection Failed:', error.message);
+                if (error.code === '42P01' || error.message.includes('404')) {
+                    console.warn('HINT: Did you create the "registrations" table in Supabase? Check the console output or ask the AI for the SQL.');
+                }
+            } else if (count === null) {
+                console.error('Supabase Connected, but "registrations" table might be missing (Count is null).');
+                console.warn('HINT: Please create the "registrations" table in your Supabase project.');
+            } else {
+                console.log('Supabase Connected Successfully! Registration table found.');
+            }
+        });
+}
 
 // Mock Data for Students (Replace with real DB fetch if available)
 const STUDENTS_DATA = {
@@ -153,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             if (!supabase) {
-                alert('Supabase client not initialized.');
+                alert('Supabase not configured. Please set SUPABASE_URL and SUPABASE_KEY in js/registration.js');
                 return;
             }
 
