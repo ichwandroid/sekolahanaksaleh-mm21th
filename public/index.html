@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Parenting App - Welcome</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ed845e",
+            "background-light": "#fcf9f8",
+            "background-dark": "#211511",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans"]
+          },
+          borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark font-display text-[#1b110e] dark:text-[#f8f6f6] min-h-screen flex flex-col antialiased">
+  <!-- Top Navigation Bar -->
+  <header class="relative z-10 flex items-center bg-transparent p-6 justify-between">
+    <div class="w-10"></div> <!-- Spacer for balance -->
+    <h2
+      class="text-[#1b110e] dark:text-[#f8f6f6] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
+      Milad Meriah 21th SD Anak Saleh</h2>
+    <div class="flex items-center justify-end w-10">
+      <button class="text-[#1b110e] dark:text-[#f8f6f6] flex items-center justify-center">
+        <span class="material-symbols-outlined"
+          style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;">help</span>
+      </button>
+    </div>
+  </header>
+  <!-- Main Content Area -->
+  <main class="relative z-10 flex-grow flex flex-col items-center px-6">
+    <!-- Illustration Section -->
+    <div class="w-full max-w-md mt-4 mb-8">
+      <div
+        class="relative aspect-square w-full bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center overflow-hidden border-4 border-white/50 dark:border-white/10 shadow-sm">
+        <!-- Abstract Hand-Drawn Style Representation -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-[250px] h-[250px] bg-center bg-no-repeat bg-contain"
+            data-alt="Soft hand-drawn illustration of a parent holding a small child lovingly"
+            style='background-image: url("SD Anak Saleh.png");'>
+          </div>
+        </div>
+        <!-- Artistic Accents -->
+        <div class="absolute top-10 right-10 w-8 h-8 rounded-full bg-primary opacity-20"></div>
+        <div class="absolute bottom-20 left-12 w-12 h-12 rounded-full bg-primary opacity-10"></div>
+      </div>
+    </div>
+    <!-- Typography Section -->
+    <div class="text-center space-y-4 max-w-sm">
+      <h1 class="text-[#1b110e] dark:text-white tracking-tight text-[32px] font-bold leading-tight">
+        Parenting Milad Meriah 21th SD Anak Saleh
+      </h1>
+      <p class="text-[#1b110e]/70 dark:text-[#f8f6f6]/70 text-base font-normal leading-relaxed">
+        Menyambut Milad Meriah 21th SD Anak Saleh mengadakan acara parenting yang berfokus pada pengembangan
+        generasi yang lebih baik.
+      </p>
+    </div>
+    <!-- Page Indicators -->
+    <div class="flex w-full flex-row items-center justify-center gap-3 py-10">
+      <div class="h-2 w-6 rounded-full bg-primary"></div>
+    </div>
+  </main>
+  <!-- Bottom Action Section -->
+  <footer class="relative z-10 p-8 space-y-4">
+    <a href="landing-page.html"
+      class="w-full bg-primary hover:bg-[#d97350] text-white text-lg font-bold py-4 px-8 rounded-full shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+      Get Started
+      <span class="material-symbols-outlined text-xl">arrow_forward</span>
+    </a>
+    <!-- iOS Home Indicator Safe Area Spacer -->
+    <div class="h-4"></div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/gsap-animations.js"></script>
+  <script src="js/three-bg.js"></script>
+</body>
+
+</html>

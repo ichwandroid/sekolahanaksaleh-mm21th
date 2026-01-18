@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Milad Meriah 21th - Parenting Excellence</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ed845e",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221d10",
+                        "accent-teal": "#8FBAB2",
+                    },
+                    fontFamily: {
+                        "display": ["Epilogue", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .geometric-bg {
+            background-color: transparent;
+            background-image: radial-gradient(#ed845e 0.5px, transparent 0.5px), radial-gradient(#ed845e 0.5px, #f8f7f5 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.1;
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .dark .geometric-bg {
+            background-image: radial-gradient(#ed845e 0.5px, transparent 0.5px), radial-gradient(#ed845e 0.5px, #221d10 0.5px);
+            opacity: 0.05;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="font-display bg-background-light dark:bg-background-dark text-[#1c180d] dark:text-white transition-colors duration-300">
+    <div class="relative z-10 min-h-screen flex flex-col max-w-md mx-auto overflow-x-hidden shadow-2xl">
+        <div class="geometric-bg"></div>
+        <!-- TopAppBar -->
+        <header
+            class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-black/5 dark:border-white/5">
+            <div
+                class="text-[#1c180d] dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            </div>
+            <h2
+                class="text-[#1c180d] dark:text-white text-base font-bold leading-tight tracking-tight flex-1 text-center">
+                Milad Meriah 21th</h2>
+            <div class="flex w-10 items-center justify-end">
+                <button
+                    class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1c180d] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">share</span>
+                </button>
+            </div>
+        </header>
+        <main class="flex-1 pb-32">
+            <!-- HeaderImage / Banner -->
+            <div class="px-4 py-4">
+                <div class="relative bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[340px] shadow-lg group"
+                    data-alt="Happy families celebrating together at an outdoor event"
+                    style='background-image: linear-gradient(0deg, rgba(34, 29, 16, 0.8) 0%, rgba(0, 0, 0, 0) 50%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjajopPDq8z8pP5sSI_M21W0efKRdGcDbSNvivYjuJ4BiFSwb8Rt_3je5YYU5SzOYNz4tYB0j0xBP8UDAe8ONMLl4t4OtAC5bynTARdFfRNCaRfBdL2f4ntPsNnvNOPBo_xgMzSlvLYtfG_l_SQ_MUXj1UbfGTojKWZvsczE0-nKP8pEt4zONx8x4XxUOhgt4DQKWhGHfCCHrFPWf6zi7UZMdYLafLJ_JlRkwBffwtW1YGpiRaimvwRnP5kpRIKJG2X6Q8cgUAYFie");'>
+                    <div
+                        class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                        EST. 2003
+                    </div>
+                    <div class="p-6">
+                        <p class="text-primary font-bold text-sm tracking-[0.2em] uppercase mb-1">Parenting Excellence
+                        </p>
+                        <h1 class="text-white tracking-tight text-3xl font-extrabold leading-tight">Nurturing Hearts
+                            &amp; Minds</h1>
+                    </div>
+                </div>
+            </div>
+            <!-- HeadlineText -->
+            <div class="px-4 text-center">
+                <h2 class="text-[#1c180d] dark:text-white tracking-tight text-2xl font-bold leading-tight pb-2 pt-4">
+                    Celebrating 21 Years of Joy</h2>
+                <p class="text-sm text-[#1c180d]/60 dark:text-white/60 max-w-xs mx-auto">Join us at SD Anak Saleh for a
+                    milestone celebration dedicated to excellence in parenting and student growth.</p>
+            </div>
+            <!-- Timer -->
+            <div class="flex gap-3 py-6 px-4">
+                <div class="flex grow basis-0 flex-col items-center gap-2">
+                    <div
+                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-primary text-white shadow-md">
+                        <p id="timer-days" class="text-2xl font-black leading-tight">00</p>
+                    </div>
+                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Days</p>
+                </div>
+                <div class="flex grow basis-0 flex-col items-center gap-2">
+                    <div
+                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-white dark:bg-[#322d1f] shadow-sm border border-black/5">
+                        <p id="timer-hours" class="text-2xl font-black leading-tight">00</p>
+                    </div>
+                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Hours
+                    </p>
+                </div>
+                <div class="flex grow basis-0 flex-col items-center gap-2">
+                    <div
+                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-white dark:bg-[#322d1f] shadow-sm border border-black/5">
+                        <p id="timer-minutes" class="text-2xl font-black leading-tight">00</p>
+                    </div>
+                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Mins</p>
+                </div>
+                <div class="flex grow basis-0 flex-col items-center gap-2">
+                    <div
+                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-white dark:bg-[#322d1f] shadow-sm border border-black/5">
+                        <p id="timer-seconds" class="text-2xl font-black leading-tight">00</p>
+                    </div>
+                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Secs</p>
+                </div>
+            </div>
+            <!-- Principal Message Card -->
+            <div class="px-4 mb-4">
+                <div
+                    class="flex flex-col gap-4 rounded-2xl bg-white dark:bg-[#2c2618] p-5 shadow-sm border border-black/5 dark:border-white/5">
+                    <div class="flex items-center gap-4">
+                        <div class="size-14 rounded-full bg-cover bg-center border-2 border-primary"
+                            data-alt="A portrait of the school principal smiling"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzlIZHZgVl5bhIvnBFiIwezw1hrvJ5tfglb8baMFYy7v32u_nEzmKS26J5E7-cnAIJjvggHti4UNSAEebxP_aRfFhC0IbIv2E-3chkN0_Tv6mw8FR2K1a82sKhP9ZEq8QvAqVZIlQv2z6JVCI4_aozZroTruw0pnYx7AJl7KaBdpZea9CTcY5GSU6ZQciJxFvtIyI8F-fwsVBf73hRQcPit83F98mf_h_2e2NvYUTuE9OEiIjTNlkVD9PgGn_XiJ6IgNA6lvDAE4rL");'>
+                        </div>
+                        <div>
+                            <p class="text-[#1c180d] dark:text-white text-lg font-bold leading-tight">Hj. Siti Rahma,
+                                M.Pd</p>
+                            <p class="text-primary text-xs font-semibold uppercase tracking-wide">School Principal</p>
+                        </div>
+                    </div>
+                    <p class="text-[#1c180d]/80 dark:text-white/80 text-sm italic leading-relaxed">
+                        "Welcome to our 21st anniversary. We are honored to grow together with parents in empowering our
+                        children for a bright, noble future."
+                    </p>
+                    <button
+                        class="flex items-center justify-center gap-2 rounded-xl h-10 px-4 bg-primary/10 dark:bg-primary/20 text-[#1c180d] dark:text-primary text-sm font-bold w-full transition-all hover:bg-primary/20">
+                        <span>Read Full Message</span>
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Event Highlights Grid -->
+            <div class="px-4 space-y-4">
+                <h3 class="text-lg font-bold px-1 flex items-center gap-2">
+                    <span class="size-2 bg-primary rounded-full"></span>
+                    Event Highlights
+                </h3>
+                <!-- Main Seminar Card -->
+                <div
+                    class="flex flex-col gap-3 rounded-2xl bg-white dark:bg-[#2c2618] overflow-hidden shadow-sm border border-black/5">
+                    <div class="h-32 bg-cover bg-center" data-alt="Parenting seminar stage with audience"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCNCSIFzo696K6DgbzwlmCn2XY5vDAcikR3VmQIbwcAKo07BYhT815Rj3n1rbFlGOn33VQZSsy9BOfoCwL2zOxN3EeN2FYrrX2QN-Clh38TcMp_3oIN4Q2XYZzyxnVNY3K23aoH_fCmIa0iotQAzz7MBAayQXch5YUkSW_zSKNsWqnKyg4W3keN3vUm3h_WsCRWel8s8fWecKOJGZUbxMf8LAaKW60wvQLdWeQJZdmyu-IE0rB48CEq23bqHFh6gRSk5fVUt1_wcubN");'>
+                    </div>
+                    <div class="p-4 pt-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <span
+                                class="text-[10px] font-bold bg-accent-teal/10 text-accent-teal px-2 py-0.5 rounded">SEMINAR</span>
+                            <span class="text-[10px] font-bold text-[#1c180d]/40 dark:text-white/40 uppercase">09:00 AM
+                                - 12:00 PM</span>
+                        </div>
+                        <p class="text-[#1c180d] dark:text-white text-base font-bold leading-tight mb-1">Nurturing
+                            Future Leaders</p>
+                        <p class="text-[#1c180d]/60 dark:text-white/60 text-xs line-clamp-2">A keynote session with
+                            parenting experts focusing on character building in the digital age.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Workshop Card -->
+                    <div
+                        class="flex flex-col gap-3 rounded-2xl bg-white dark:bg-[#2c2618] p-4 shadow-sm border border-black/5">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">palette</span>
+                        </div>
+                        <div>
+                            <p class="text-[#1c180d] dark:text-white text-sm font-bold leading-tight">Creative Workshop
+                            </p>
+                            <p class="text-[#1c180d]/60 dark:text-white/60 text-[11px] mt-1 leading-tight">Hand-on
+                                crafting for parents &amp; kids.</p>
+                        </div>
+                    </div>
+                    <!-- Performance Card -->
+                    <div
+                        class="flex flex-col gap-3 rounded-2xl bg-white dark:bg-[#2c2618] p-4 shadow-sm border border-black/5">
+                        <div
+                            class="size-10 rounded-xl bg-accent-teal/10 flex items-center justify-center text-accent-teal">
+                            <span class="material-symbols-outlined">theater_comedy</span>
+                        </div>
+                        <div>
+                            <p class="text-[#1c180d] dark:text-white text-sm font-bold leading-tight">Art Showcase</p>
+                            <p class="text-[#1c180d]/60 dark:text-white/60 text-[11px] mt-1 leading-tight">21 years of
+                                student talent &amp; glory.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Location Details -->
+            <div class="px-4 mt-8">
+                <div class="rounded-2xl overflow-hidden bg-white dark:bg-[#2c2618] shadow-sm border border-black/5">
+                    <div class="h-32 w-full bg-[#f4f0e7] relative overflow-hidden"
+                        data-alt="Map showing school location" data-location="Malang, Indonesia"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBTMIrUw3i2NIIJowYRY-7ACzWSQ5MOoklLNNe414LXyqhmkrp8gL0g9k8O8DNaGlUcN8bggDgWJIKcf-Z8qG5_xoGsbg-hyEo5ys1ZM0HnvlSTYrrwpJ7NXcoBdx7w9CmpkYs4vjVV1hpDGkOBMic0lz05HrvMEI7POHkbedrBdCUoAeGqSMMJefAUxvIPtGMdAmm1TmRazdb1aX5DDvj32I5xd15XG_uU6BW67Hm-E7QWXMOzyK_amZyGgBqc2QzX8jcY_a5v6Xc6");'>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="size-8 bg-primary rounded-full flex items-center justify-center animate-pulse">
+                                <span class="material-symbols-outlined text-white text-sm">location_on</span>
+                            </div>
+                        </div>
+                        <img alt="map" class="w-full h-full object-cover opacity-30"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVSFK6xOs_nwiphJ5oCxOuE-Qqpr0EVgnkBZLeKVvr8NdF2_H_g-LI4EzYZ16Zla6kFlZpN4KzGwKm5RcGH3KCGOsAHbzo_u5gm3i76X_8qkNa9LVeKWwOynvFuhbrI-zOXReFY-gIIEow1CWBYdWmPx_O6mlKxU_z1xMuXKwYRSMWsujfHuv7UhGrfzMf4QbdkdUEr7RiRW4P_pz-I7GNh3UiCDpGr6nSKsZyilnUxUDYQBwHyCNj81hCN1_BYp4jXCnJQ5yx8hhE" />
+                    </div>
+                    <div class="p-4 flex flex-col gap-1">
+                        <p class="text-[#1c180d] dark:text-white text-sm font-bold">SD Anak Saleh Main Hall</p>
+                        <p class="text-[#1c180d]/60 dark:text-white/60 text-xs">Jl. Arumba No. 31, Malang, Jawa Timur
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Floating Registration CTA -->
+        <div
+            class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/95 dark:via-background-dark/95 to-transparent z-[100]">
+            <div class="max-w-md mx-auto">
+                <button id="btn-register-cta"
+                    class="w-full h-14 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-base rounded-2xl shadow-lg shadow-primary/20 flex items-center justify-center gap-3 transition-transform active:scale-95">
+                    <span class="material-symbols-outlined">how_to_reg</span>
+                    Register for Free
+                </button>
+                <p
+                    class="text-center text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-3 font-medium uppercase tracking-widest">
+                    Limited Slots Available • RSVP by Oct 12</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/gsap-animations.js"></script>
+    <script src="js/timer.js"></script>
+
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="fixed inset-0 z-[150] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop">
+        </div>
+
+        <!-- Modal Content -->
+        <div
+            class="absolute inset-x-4 bottom-4 md:inset-0 md:flex md:items-center md:justify-center pointer-events-none">
+            <div class="bg-white dark:bg-[#2c2618] rounded-3xl p-6 shadow-2xl w-full max-w-md mx-auto transform translate-y-full md:translate-y-10 opacity-0 transition-all duration-300 pointer-events-auto"
+                id="modal-panel">
+
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-[#1c180d] dark:text-white">Join the Event</h3>
+                        <p class="text-xs text-[#1c180d]/60 dark:text-white/60">Fill in your details to secure a spot.
+                        </p>
+                    </div>
+                    <button id="btn-close-modal"
+                        class="size-8 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-[#1c180d] dark:text-white transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+
+                <form id="registration-form" class="space-y-4">
+                    <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="space-y-1">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Father's
+                                Name</label>
+                            <input type="text" name="father_name" required placeholder="Nama Lengkap Ayah"
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Mother's
+                                Name</label>
+                            <input type="text" name="mother_name" required placeholder="Nama Lengkap Ibu"
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Children</label>
+                            <div id="children-container" class="space-y-3">
+                                <!-- Dynamic Child Rows will be inserted here -->
+                            </div>
+                            <button type="button" id="btn-add-child"
+                                class="text-xs font-bold text-primary hover:text-primary/80 flex items-center gap-1 mt-2">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                                Add Another Child
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">WhatsApp</label>
+                                <input type="tel" name="phone" required placeholder="08..."
+                                    class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Email</label>
+                                <input type="email" name="email" required placeholder="email@..."
+                                    class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Proof
+                                of Registration</label>
+                            <div class="relative">
+                                <input type="file" name="payment_proof" required accept="image/*,application/pdf"
+                                    class="w-full text-sm text-[#1c180d] dark:text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                                <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-1 ml-1">Max 2MB. Image or
+                                    PDF only.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-submit-registration"
+                        class="w-full h-12 mt-4 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 disabled:opacity-70">
+                        <span>Confirm Registration</span>
+                        <span class="material-symbols-outlined text-lg">check_circle</span>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/registration.js"></script>
+    <script src="js/three-bg.js"></script>
+</body>
+
+</html>
