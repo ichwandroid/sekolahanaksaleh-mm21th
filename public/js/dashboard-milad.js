@@ -7,12 +7,168 @@ const supabase = (window.supabase && SUPABASE_URL && SUPABASE_KEY)
 
 const tableBody = document.getElementById('registrations-table-body');
 const totalStat = document.getElementById('stat-total');
+const verifiedStat = document.getElementById('stat-verified');
+const pendingStat = document.getElementById('stat-pending');
 const refreshBtn = document.getElementById('btn-refresh');
 const searchInput = document.getElementById('search-input');
 const imageModal = document.getElementById('image-modal');
 const modalImage = document.getElementById('modal-image');
+const exportBtn = document.getElementById('btn-export-csv');
 
 let allRegistrations = [];
+let currentFilter = 'all';
+
+// Edit Modal Elements
+const editModal = document.getElementById('edit-modal');
+const editForm = document.getElementById('edit-form');
+const btnCancelEdit = document.getElementById('btn-cancel-edit');
+const btnSaveEdit = document.getElementById('btn-save-edit');
+
+// Edit & Delete Logic (Global)
+window.deleteRegistration = async (id) => {
+    if (!confirm('Are you sure you want to delete this registration?')) return;
+
+    try {
+        // We select the deleted row to ensure it was actually deleted
+        const { data, error } = await supabase
+            .from('registrations')
+            .delete()
+            .eq('id', id)
+            .select();
+
+        if (error) throw error;
+
+        // Check if any row was actually deleted
+        if (!data || data.length === 0) {
+            throw new Error('Deletion failed. Policy might not allow deleting this record.');
+        }
+
+        const deletedRecord = data[0];
+
+        // Delete the proof image from storage if it exists
+        if (deletedRecord.proof_url) {
+            try {
+                // Extract filename from URL
+                // URL format: .../registration-proofs/[filename]
+                const urlParts = deletedRecord.proof_url.split('/');
+                const fileName = urlParts[urlParts.length - 1];
+
+                if (fileName) {
+                    const { error: storageError } = await supabase.storage
+                        .from('registration-proofs')
+                        .remove([fileName]);
+
+                    if (storageError) {
+                        console.warn('Failed to delete proof image:', storageError);
+                    } else {
+                        console.log('Proof image deleted:', fileName);
+                    }
+                }
+            } catch (err) {
+                console.warn('Error deleting file from storage:', err);
+            }
+        }
+
+        // Remove from local array and re-render
+        allRegistrations = allRegistrations.filter(r => r.id !== id);
+        updateStats();
+        renderTable(allRegistrations);
+        alert('Data deleted successfully.');
+
+    } catch (error) {
+        console.error('Error deleting:', error);
+        alert('Failed to delete: ' + error.message + '\n\nHint: Check Supabase RLS policies.');
+    }
+};
+
+window.openEditModal = (id) => {
+    const data = allRegistrations.find(r => r.id === id);
+    if (!data) return;
+
+    document.getElementById('edit-id').value = data.id;
+    document.getElementById('edit-father').value = data.father_name;
+    document.getElementById('edit-mother').value = data.mother_name;
+    document.getElementById('edit-children').value = data.child_name;
+    document.getElementById('edit-phone').value = data.phone;
+    document.getElementById('edit-email').value = data.email;
+
+    editModal.classList.remove('hidden');
+};
+
+// Verification Logic (Global)
+window.verifyPayment = async (id, status) => {
+    try {
+        const { error } = await supabase
+            .from('registrations')
+            .update({ payment_status: status })
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Update local data
+        const index = allRegistrations.findIndex(r => r.id === id);
+        if (index !== -1) {
+            allRegistrations[index].payment_status = status;
+        }
+
+        updateStats();
+        renderTable(getFilteredData());
+
+    } catch (error) {
+        console.error('Error updating payment status:', error);
+        alert('Failed to update status: ' + error.message);
+    }
+};
+
+function closeEditModal() {
+    editModal.classList.add('hidden');
+    editForm.reset();
+}
+
+btnCancelEdit.addEventListener('click', closeEditModal);
+
+editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('edit-id').value;
+    const btnText = btnSaveEdit.innerHTML;
+
+    btnSaveEdit.disabled = true;
+    btnSaveEdit.innerHTML = 'Saving...';
+
+    const updates = {
+        father_name: document.getElementById('edit-father').value,
+        mother_name: document.getElementById('edit-mother').value,
+        child_name: document.getElementById('edit-children').value,
+        phone: document.getElementById('edit-phone').value,
+        email: document.getElementById('edit-email').value,
+    };
+
+    try {
+        const { error } = await supabase
+            .from('registrations')
+            .update(updates)
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Update local data
+        const index = allRegistrations.findIndex(r => r.id == id);
+        if (index !== -1) {
+            allRegistrations[index] = { ...allRegistrations[index], ...updates };
+        }
+
+        renderTable(allRegistrations);
+        closeEditModal();
+        alert('Update successful!');
+
+    } catch (error) {
+        console.error('Error updating:', error);
+        alert('Failed to update: ' + error.message);
+    } finally {
+        btnSaveEdit.disabled = false;
+        btnSaveEdit.innerHTML = btnText;
+    }
+});
 
 // Format Date Helper
 function formatDate(dateString) {
@@ -113,10 +269,42 @@ function renderTable(data) {
                     </button>
                 ` : '<span class="text-xs text-[#1c180d]/40">No proof</span>'}
             </td>
+            <td class="px-6 py-4 align-top">
+                ${row.payment_status === 'verified' ? `
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                        <span class="material-symbols-outlined text-sm mr-1">check_circle</span>
+                        Verified
+                    </span>
+                ` : `
+                    <div class="flex flex-col gap-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 w-fit">
+                            <span class="material-symbols-outlined text-sm mr-1">pending</span>
+                            Pending
+                        </span>
+                        <div class="flex gap-1">
+                            <button onclick="window.verifyPayment(${row.id}, 'verified')" 
+                                class="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-bold transition-colors"
+                                title="Approve">
+                                ✓
+                            </button>
+                            <button onclick="window.verifyPayment(${row.id}, 'rejected')" 
+                                class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-bold transition-colors"
+                                title="Reject">
+                                ✗
+                            </button>
+                        </div>
+                    </div>
+                `}
+            </td>
             <td class="px-6 py-4 align-top text-right">
-                <button class="text-[#1c180d]/40 hover:text-red-500 transition-colors" title="Delete (coming soon)">
-                    <span class="material-symbols-outlined">delete</span>
-                </button>
+                <div class="flex justify-end gap-2">
+                    <button onclick="window.openEditModal(${row.id})" class="text-[#1c180d]/40 hover:text-primary transition-colors" title="Edit">
+                        <span class="material-symbols-outlined">edit</span>
+                    </button>
+                    <button onclick="window.deleteRegistration(${row.id})" class="text-[#1c180d]/40 hover:text-red-500 transition-colors" title="Delete">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
             </td>
         </tr>
     `).join('');
@@ -125,6 +313,59 @@ function renderTable(data) {
 // Update Stats
 function updateStats() {
     totalStat.textContent = allRegistrations.length;
+    const verified = allRegistrations.filter(r => r.payment_status === 'verified').length;
+    const pending = allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending').length;
+    verifiedStat.textContent = verified;
+    pendingStat.textContent = pending;
+}
+
+// Filter Logic
+function getFilteredData() {
+    if (currentFilter === 'all') return allRegistrations;
+    if (currentFilter === 'verified') return allRegistrations.filter(r => r.payment_status === 'verified');
+    if (currentFilter === 'pending') return allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending');
+    return allRegistrations;
+}
+
+// Filter Buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active', 'bg-primary', 'text-white');
+            b.classList.add('bg-gray-100', 'dark:bg-[#221d10]', 'text-[#1c180d]', 'dark:text-white');
+        });
+        e.target.classList.add('active', 'bg-primary', 'text-white');
+        e.target.classList.remove('bg-gray-100', 'dark:bg-[#221d10]', 'text-[#1c180d]', 'dark:text-white');
+
+        currentFilter = e.target.dataset.filter;
+        renderTable(getFilteredData());
+    });
+});
+
+// Export CSV
+if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+        const csv = [
+            ['Date', 'Father', 'Mother', 'Children', 'Phone', 'Email', 'Status'],
+            ...allRegistrations.map(r => [
+                new Date(r.created_at).toLocaleDateString('id-ID'),
+                r.father_name,
+                r.mother_name,
+                r.child_name,
+                r.phone,
+                r.email,
+                r.payment_status || 'pending'
+            ])
+        ].map(row => row.join(',')).join('\n');
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `registrations_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
 }
 
 // Search Functionality
