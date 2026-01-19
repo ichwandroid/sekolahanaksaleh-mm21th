@@ -18,6 +18,7 @@
         rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -28,6 +29,7 @@
                         "background-light": "#f8f7f5",
                         "background-dark": "#221d10",
                         "accent-teal": "#8FBAB2",
+                        "secondary": "#ffffff",
                     },
                     fontFamily: {
                         "display": ["Epilogue", "sans-serif"],
@@ -56,7 +58,7 @@
         }
 
         .dark .geometric-bg {
-            background-image: radial-gradient(#f78dbb 0.5px, transparent 0.5px), radial-gradient(#f78dbb 0.5px, #221d10 0.5px);
+            background-image: radial-gradient(#f78dbb 0.5px, transparent 0.5px), radial-gradient(#f78dbb 0.5px, #f78dbb 0.5px);
             opacity: 0.05;
         }
     </style>
@@ -93,16 +95,16 @@
             <div class="px-4 py-4">
                 <div class="relative bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[340px] shadow-lg group"
                     data-alt="Happy families celebrating together at an outdoor event"
-                    style='background-image: linear-gradient(0deg, rgba(34, 29, 16, 0.7) 0%, rgba(0, 0, 0, 0) 50%), url("foto-removebg-preview.png"), url("SD Anak Saleh.png"); background-position: center, bottom right, center; background-size: cover, contain, cover; background-repeat: no-repeat;'>
+                    style='background-image: linear-gradient(0deg, rgba(241, 143, 245, 0.7) 0%, rgba(0, 0, 0, 0) 50%), url("foto-removebg-preview.png"), url("SD Anak Saleh.png"); background-position: center, bottom right, center; background-size: cover, contain, cover; background-repeat: no-repeat;'>
                     <div
                         class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
                         14 Februari 2026
                     </div>
                     <div class="p-6">
-                        <p class="text-primary font-bold text-sm tracking-[0.2em] uppercase mb-1">Parenting
-                        </p>
-                        <h1 class="text-white tracking-tight text-3xl font-extrabold leading-tight">Milad Meriah 21th
-                            SD Anak Saleh</h1>
+                        <p class="text-black font-bold text-sm tracking-[0.2em] uppercase mb-1">Smart Parenting</p>
+                        <h2
+                            class="text-black bg-secondary px-2 py-1 rounded tracking-tight text-3xl font-extrabold leading-tight">
+                            Menjadi Ayah penyejuk jiwa, Berseri sebagai Istri, dan Berilmu sebagai Ibu</h2>
                     </div>
                 </div>
             </div>
@@ -111,9 +113,9 @@
                 <h2 class="text-[#1c180d] dark:text-white tracking-tight text-2xl font-bold leading-tight pb-2 pt-4">
                     Merayakan 21 Tahun</h2>
                 <p class="text-sm text-[#1c180d]/60 dark:text-white/60 max-w-xs mx-auto">
-                    Bergabunglah bersama kami di SD Anak Saleh untuk a
-                    perayaan tonggak sejarah yang didedikasikan untuk keunggulan dalam pengasuhan anak dan pertumbuhan
-                    siswa.</p>
+                    Bergabunglah bersama SD Anak Saleh untuk memeriahkan Milad Sekola yang didedikasikan untuk
+                    keunggulan dalam menerapkan pola asuh yang bijak, adaptif, dan penuh kesadaran demi mengoptimalkan
+                    tumbuh kembang serta karakter buah hati tersayang.</p>
             </div>
             <!-- Timer -->
             <div class="flex gap-3 py-6 px-4">
@@ -175,42 +177,45 @@
                     <span class="size-2 bg-primary rounded-full"></span>
                     Event Highlights
                 </h3>
-                <!-- Parenting Card -->
-                <div
-                    class="flex flex-col gap-3 rounded-2xl bg-white dark:bg-[#2c2618] overflow-hidden shadow-sm border border-black/5">
-                    <div class="h-32 bg-cover bg-center" data-alt="Parenting seminar stage"
-                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCNCSIFzo696K6DgbzwlmCn2XY5vDAcikR3VmQIbwcAKo07BYhT815Rj3n1rbFlGOn33VQZSsy9BOfoCwL2zOxN3EeN2FYrrX2QN-Clh38TcMp_3oIN4Q2XYZzyxnVNY3K23aoH_fCmIa0iotQAzz7MBAayQXch5YUkSW_zSKNsWqnKyg4W3keN3vUm3h_WsCRWel8s8fWecKOJGZUbxMf8LAaKW60wvQLdWeQJZdmyu-IE0rB48CEq23bqHFh6gRSk5fVUt1_wcubN");'>
-                    </div>
-                    <div class="p-4 pt-1">
-                        <div class="flex justify-between items-start mb-2">
-                            <span
-                                class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded">PARENTING</span>
-                            <span class="text-[10px] font-bold text-[#1c180d]/40 dark:text-white/40 uppercase">08:00 -
-                                11:30 WIB</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Parenting Card -->
+                    <div
+                        class="flex flex-col gap-2 rounded-2xl bg-white dark:bg-[#2c2618] p-3 shadow-sm border border-black/5 dark:border-white/5">
+                        <div class="flex justify-between items-start">
+                            <div
+                                class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                <span class="material-symbols-outlined text-lg">diversity_1</span>
+                            </div>
+                            <span class="text-[10px] font-bold text-[#1c180d]/40 dark:text-white/40 uppercase">08:00
+                                WIB</span>
                         </div>
-                        <p class="text-[#1c180d] dark:text-white text-base font-bold leading-tight mb-1">Parenting</p>
-                        <p class="text-[#1c180d]/60 dark:text-white/60 text-xs line-clamp-2">Mendidik anak di era
-                            digital bersama narasumber ahli.</p>
+                        <div>
+                            <p class="text-[#1c180d] dark:text-white text-sm font-bold leading-tight mb-0.5">Smart
+                                Parenting
+                            </p>
+                            <p class="text-[#1c180d]/60 dark:text-white/60 text-[10px] line-clamp-1">Menjadi Ayah
+                                penyejuk jiwa, Berseri sebagai Istri, dan Berilmu sebagai Ibu</p>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Bazar Card -->
-                <div
-                    class="flex flex-col gap-3 rounded-2xl bg-white dark:bg-[#2c2618] overflow-hidden shadow-sm border border-black/5">
-                    <div class="h-32 bg-cover bg-center" data-alt="Bazar crowd"
-                        style='background-image: url("https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80");'>
-                    </div>
-                    <div class="p-4 pt-1">
-                        <div class="flex justify-between items-start mb-2">
-                            <span
-                                class="text-[10px] font-bold bg-accent-teal/10 text-accent-teal px-2 py-0.5 rounded">BAZAR</span>
+                    <!-- Bazar Card -->
+                    <div
+                        class="flex flex-col gap-2 rounded-2xl bg-white dark:bg-[#2c2618] p-3 shadow-sm border border-black/5 dark:border-white/5">
+                        <div class="flex justify-between items-start">
+                            <div
+                                class="size-8 rounded-full bg-accent-teal/10 flex items-center justify-center text-accent-teal shrink-0">
+                                <span class="material-symbols-outlined text-lg">storefront</span>
+                            </div>
                             <span class="text-[10px] font-bold text-[#1c180d]/40 dark:text-white/40 uppercase">08:00 -
                                 Selesai</span>
                         </div>
-                        <p class="text-[#1c180d] dark:text-white text-base font-bold leading-tight mb-1">Bazar Meriah
-                        </p>
-                        <p class="text-[#1c180d]/60 dark:text-white/60 text-xs line-clamp-2">Nikmati aneka kuliner
-                            lezat, produk kreatif siswa, dan merchandise eksklusif.</p>
+                        <div>
+                            <p class="text-[#1c180d] dark:text-white text-sm font-bold leading-tight mb-0.5">Bazar
+                                Meriah
+                            </p>
+                            <p class="text-[#1c180d]/60 dark:text-white/60 text-[10px] line-clamp-2">Kuliner & produk
+                                kreatif.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -242,7 +247,7 @@
                 <button id="btn-register-cta"
                     class="w-full h-14 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-base rounded-2xl shadow-lg shadow-primary/20 flex items-center justify-center gap-3 transition-transform active:scale-95">
                     <span class="material-symbols-outlined">how_to_reg</span>
-                    Daftar dengan Infaq Terbaik
+                    Konfirmasi Kehadiran
                 </button>
                 <p
                     class="text-center text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-3 font-medium uppercase tracking-widest">
@@ -315,7 +320,7 @@
                             <div class="space-y-1">
                                 <label
                                     class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">WhatsApp</label>
-                                <input type="tel" name="phone" required placeholder="08..."
+                                <input type="tel" name="phone" required placeholder="62..."
                                     class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
                             </div>
 
@@ -327,15 +332,170 @@
                             </div>
                         </div>
 
-                        <div class="space-y-1">
+                        <!-- Attendance Confirmation Section -->
+                        <div class="space-y-3 pt-2">
                             <label
-                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Bukti
-                                Infaq</label>
-                            <div class="relative">
-                                <input type="file" name="payment_proof" required accept="image/*,application/pdf"
-                                    class="w-full text-sm text-[#1c180d] dark:text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
-                                <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-1 ml-1">Hanya gambar
-                                    berformat .jpg, .jpeg, .png dengan ukuran maksimal 2MB</p>
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Konfirmasi
+                                Kehadiran</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <!-- Option 1: Ayah Saja -->
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="attendance" value="ayah_saja" class="peer sr-only"
+                                        required>
+                                    <div
+                                        class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex flex-col items-center justify-center gap-2">
+                                        <div
+                                            class="p-2 rounded-full bg-white dark:bg-[#2c2618] shadow-sm text-primary group-hover:scale-110 transition-transform">
+                                            <span class="material-symbols-outlined">face</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Ayah</span>
+                                            <span
+                                                class="text-[9px] text-[#1c180d]/50 dark:text-white/50 leading-tight">Hanya
+                                                Ayah yang hadir</span>
+                                        </div>
+                                        <div
+                                            class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                            <span
+                                                class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <!-- Option 2: Ibu Saja -->
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="attendance" value="ibu_saja" class="peer sr-only">
+                                    <div
+                                        class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex flex-col items-center justify-center gap-2">
+                                        <div
+                                            class="p-2 rounded-full bg-white dark:bg-[#2c2618] shadow-sm text-primary group-hover:scale-110 transition-transform">
+                                            <span class="material-symbols-outlined">face_3</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Ibu</span>
+                                            <span
+                                                class="text-[9px] text-[#1c180d]/50 dark:text-white/50 leading-tight">Hanya
+                                                Ibu yang hadir</span>
+                                        </div>
+                                        <div
+                                            class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                            <span
+                                                class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <!-- Option 3: Berdua -->
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="attendance" value="ayah_bunda" class="peer sr-only">
+                                    <div
+                                        class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex flex-col items-center justify-center gap-2">
+                                        <div
+                                            class="p-2 rounded-full bg-white dark:bg-[#2c2618] shadow-sm text-primary group-hover:scale-110 transition-transform">
+                                            <span class="material-symbols-outlined">diversity_3</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Berdua</span>
+                                            <span
+                                                class="text-[9px] text-[#1c180d]/50 dark:text-white/50 leading-tight">Ayah
+                                                & Ibu hadir</span>
+                                        </div>
+                                        <div
+                                            class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                            <span
+                                                class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div
+                                class="flex items-center gap-3 bg-[#f8f7f5] dark:bg-[#221d10] p-3 rounded-xl border border-transparent hover:border-primary/20 transition-colors">
+                                <div class="flex-1">
+                                    <p class="text-sm font-bold text-[#1c180d] dark:text-white">Ingin Berinfaq?</p>
+                                    <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60">Bantu dukung kegiatan
+                                        ini dengan berinfaq seikhlasnya.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="toggle-infaq" class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 dark:peer-focus:ring-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                                    </div>
+                                </label>
+                            </div>
+
+
+                            <div id="infaq-container" class="space-y-4 hidden text-left">
+                                <!-- Payment Details Card -->
+                                <div
+                                    class="bg-[#f8f7f5] dark:bg-[#221d10] p-4 rounded-xl border border-black/5 dark:border-white/5 space-y-4">
+
+                                    <!-- Bank Transfer -->
+                                    <div class="space-y-2">
+                                        <p
+                                            class="text-[10px] font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 text-center">
+                                            Transfer Bank</p>
+                                        <div
+                                            class="flex items-center gap-3 bg-white dark:bg-[#2c2618] p-3 rounded-xl shadow-sm border border-black/5 dark:border-white/5">
+                                            <div class="bg-primary/10 p-2.5 rounded-full shrink-0">
+                                                <span
+                                                    class="material-symbols-outlined text-primary text-xl">account_balance</span>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-xs font-bold text-[#1c180d] dark:text-white">Bank BSI</p>
+                                                <div class="flex items-center gap-2">
+                                                    <p
+                                                        class="text-sm font-mono font-bold text-[#1c180d] dark:text-white truncate">
+                                                        7100123456</p>
+                                                    <button type="button"
+                                                        class="text-[10px] bg-primary/10 hover:bg-primary/20 text-primary font-bold px-2 py-0.5 rounded transition-colors"
+                                                        onclick="copyToClipboard('7100123456', this)">Salin</button>
+                                                </div>
+                                                <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">a.n
+                                                    SD Anak Saleh</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Divider -->
+                                    <div class="relative flex py-1 items-center">
+                                        <div class="flex-grow border-t border-black/10 dark:border-white/10"></div>
+                                        <span
+                                            class="flex-shrink-0 mx-2 text-[10px] text-[#1c180d]/40 dark:text-white/40 font-bold uppercase">Atau
+                                            QRIS</span>
+                                        <div class="flex-grow border-t border-black/10 dark:border-white/10"></div>
+                                    </div>
+
+                                    <!-- QRIS -->
+                                    <div class="flex justify-center">
+                                        <div
+                                            class="bg-white p-3 rounded-xl shadow-sm border border-black/5 inline-block">
+                                            <div
+                                                class="w-32 h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
+                                                <span
+                                                    class="material-symbols-outlined text-3xl text-gray-400 mb-1">qr_code_2</span>
+                                                <span class="text-[10px] font-bold text-gray-400">QRIS CODE</span>
+                                            </div>
+                                            <p class="text-[10px] text-center mt-2 font-bold text-[#1c180d]">SD ANAK
+                                                SALEH</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- File Upload -->
+                                <div class="pt-2">
+                                    <label
+                                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1 mb-1 block">Upload
+                                        Bukti Transfer</label>
+                                    <div class="relative group">
+                                        <input type="file" name="payment_proof" accept="image/*,application/pdf"
+                                            class="w-full text-sm text-[#1c180d] dark:text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer bg-[#f8f7f5] dark:bg-[#221d10] rounded-xl border border-transparent group-hover:border-primary/20 transition-all">
+                                        <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-1.5 ml-1">Format:
+                                            JPG, PNG, PDF (Max. 2MB)</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

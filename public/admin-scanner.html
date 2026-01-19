@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Checkin Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;700;800&family=Noto+Sans:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: #f8f7f5;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Epilogue', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center">
+
+    <header class="w-full bg-white shadow-sm p-4 sticky top-0 z-50">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <h1 class="text-lg font-bold text-gray-800">Check-in Scanner</h1>
+            <div class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs font-bold">MILAD 21</div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-md flex-1 p-4 flex flex-col gap-4">
+
+        <!-- Scanner Section -->
+        <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100 overflow-hidden">
+            <div id="reader" class="w-full rounded-lg overflow-hidden bg-black"></div>
+            <p class="text-center text-xs text-gray-400 mt-2">Arahkan kamera ke QR Code peserta</p>
+        </div>
+
+        <!-- Result Section -->
+        <div id="result-card"
+            class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hidden relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gray-200" id="status-bar"></div>
+
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider">Detail Peserta</h3>
+                    <p class="text-2xl font-bold text-gray-800" id="p-father">-</p>
+                    <p class="text-sm text-gray-600" id="p-mother">-</p>
+                </div>
+                <div id="status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-500">
+                    ...
+                </div>
+            </div>
+
+            <div class="space-y-3 border-t border-gray-100 pt-3">
+                <div class="flex gap-3 items-start">
+                    <span class="material-symbols-outlined text-gray-400">child_care</span>
+                    <div>
+                        <p class="text-xs text-gray-400 font-bold uppercase">Anak</p>
+                        <p class="text-sm text-gray-800 font-medium" id="p-children">-</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 items-start">
+                    <span class="material-symbols-outlined text-gray-400">confirmation_number</span>
+                    <div>
+                        <p class="text-xs text-gray-400 font-bold uppercase">Kehadiran</p>
+                        <p class="text-sm text-gray-800 font-medium" id="p-attendance">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex gap-3">
+                <button id="btn-checkin" onclick="processCheckin()"
+                    class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 transition-all">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Check In
+                </button>
+                <button onclick="resetScanner()"
+                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl transition-all">
+                    Batal
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { SUPABASE_URL, SUPABASE_KEY } from './js/supabase-config.js';
+
+        let html5QrcodeScanner;
+        let currentData = null;
+        let supabaseClient;
+        let isProcessing = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!SUPABASE_URL || !SUPABASE_KEY) {
+                alert("Supabase Config Missing!");
+                return;
+            }
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            // Initialize Scanner
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader",
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                },
+                /* verbose= */ false
+            );
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        });
+
+        async function onScanSuccess(decodedText, decodedResult) {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            // Stop scanning temporarily
+            html5QrcodeScanner.pause();
+
+            try {
+                // Parse QR Data
+                let parsed;
+                try {
+                    parsed = JSON.parse(decodedText);
+                } catch (e) {
+                    // Try to treat it as a raw ID string if JSON fails
+                    parsed = { id: decodedText };
+                }
+
+                if (!parsed.id) {
+                    throw new Error("Invalid QR Code (No ID)");
+                }
+
+                showLoading();
+
+                // Fetch Data
+                const { data, error } = await supabaseClient
+                    .from('registrations')
+                    .select('*')
+                    .eq('id', parsed.id)
+                    .single();
+
+                if (error || !data) {
+                    throw new Error("Data peserta tidak ditemukan.");
+                }
+
+                currentData = data;
+                showResult(data);
+
+            } catch (error) {
+                alert("Error: " + error.message);
+                resetScanner();
+            }
+        }
+
+        function onScanFailure(error) {
+            // handle scan failure, usually better to ignore and keep scanning.
+            // console.warn(`Code scan error = ${error}`);
+        }
+
+        function showResult(data) {
+            document.getElementById('result-card').classList.remove('hidden');
+
+            // Populate Fields
+            document.getElementById('p-father').textContent = data.father_name || '-';
+            document.getElementById('p-mother').textContent = data.mother_name || '-';
+            document.getElementById('p-children').textContent = data.child_name || '-';
+
+            let attHtml = data.attendance;
+            if (data.attendance === 'ayah_saja') attHtml = 'Ayah Saja';
+            if (data.attendance === 'ibu_saja') attHtml = 'Ibu Saja';
+            if (data.attendance === 'ayah_bunda') attHtml = 'Ayah & Bunda';
+            document.getElementById('p-attendance').textContent = attHtml;
+
+            // Check Status
+            const btn = document.getElementById('btn-checkin');
+            const badge = document.getElementById('status-badge');
+            const statusBar = document.getElementById('status-bar');
+
+            if (data.checkin_at) {
+                // Already Checked In
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600";
+                badge.innerHTML = `<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">check</span> SUDAH MASUK</span>`;
+
+                statusBar.className = "absolute top-0 left-0 w-full h-1 bg-green-500";
+
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = 'Sudah Check-In';
+
+                // Show timestamp
+                const time = new Date(data.checkin_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('p-attendance').innerHTML += `<br><span class="text-green-600 text-xs font-bold">Checked in at ${time}</span>`;
+            } else {
+                // Not yet
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-600";
+                badge.innerHTML = "BELUM CHECK-IN";
+
+                statusBar.className = "absolute top-0 left-0 w-full h-1 bg-orange-500";
+
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Check In`;
+            }
+
+            // Scroll to result
+            document.getElementById('result-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.processCheckin = async () => {
+            if (!currentData) return;
+
+            const btn = document.getElementById('btn-checkin');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Processing...";
+            btn.disabled = true;
+
+            try {
+                const timestamp = new Date().toISOString();
+                const { error } = await supabaseClient
+                    .from('registrations')
+                    .update({ checkin_at: timestamp })
+                    .eq('id', currentData.id);
+
+                if (error) throw error;
+
+                // Success
+                alert(`Check-in Berhasil!\nSelamat datang, ${currentData.father_name || currentData.mother_name}`);
+                resetScanner();
+
+            } catch (error) {
+                console.error(error);
+                alert("Gagal Check-in: " + error.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        window.resetScanner = () => {
+            document.getElementById('result-card').classList.add('hidden');
+            currentData = null;
+            isProcessing = false;
+            html5QrcodeScanner.resume();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showLoading() {
+            // Optional: Show loading state
+        }
+    </script>
+</body>
+
+</html>

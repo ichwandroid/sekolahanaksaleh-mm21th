@@ -138,6 +138,7 @@
                             <th class="px-6 py-4">Date</th>
                             <th class="px-6 py-4">Parents</th>
                             <th class="px-6 py-4">Children</th>
+                            <th class="px-6 py-4">Attendance</th>
                             <th class="px-6 py-4">Contact</th>
                             <th class="px-6 py-4">Proof</th>
                             <th class="px-6 py-4">Status</th>
@@ -146,7 +147,7 @@
                     </thead>
                     <tbody id="registrations-table-body" class="divide-y divide-black/5 dark:divide-white/5">
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-[#1c180d]/40 dark:text-white/40">
+                            <td colspan="7" class="px-6 py-8 text-center text-[#1c180d]/40 dark:text-white/40">
                                 <span
                                     class="animate-spin material-symbols-outlined text-2xl mb-2">progress_activity</span>
                                 <p>Loading data...</p>
@@ -201,6 +202,17 @@
                     <input type="text" id="edit-children" required placeholder="Name (Class), Name (Class)"
                         class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
                     <p class="text-[10px] text-[#1c180d]/40 ml-1">Example: Ahmad (1A), Budi (2B)</p>
+                </div>
+
+                <div class="space-y-1">
+                    <label
+                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Attendance</label>
+                    <select id="edit-attendance" required
+                        class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
+                        <option value="ayah_saja">Ayah Saja</option>
+                        <option value="ibu_saja">Ibu Saja</option>
+                        <option value="ayah_bunda">Ayah & Bunda</option>
+                    </select>
                 </div>
 
                 <div class="space-y-1">
