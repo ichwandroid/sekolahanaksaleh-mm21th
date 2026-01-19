@@ -24,7 +24,7 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#ed845e",
+                        "primary": "#f78dbb",
                         "background-light": "#f8f7f5",
                         "background-dark": "#221d10",
                         "accent-teal": "#8FBAB2",
@@ -46,7 +46,7 @@
     <style>
         .geometric-bg {
             background-color: transparent;
-            background-image: radial-gradient(#ed845e 0.5px, transparent 0.5px), radial-gradient(#ed845e 0.5px, #f8f7f5 0.5px);
+            background-image: radial-gradient(#f78dbb 0.5px, transparent 0.5px), radial-gradient(#f78dbb 0.5px, #f8f7f5 0.5px);
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
             opacity: 0.1;
@@ -56,7 +56,7 @@
         }
 
         .dark .geometric-bg {
-            background-image: radial-gradient(#ed845e 0.5px, transparent 0.5px), radial-gradient(#ed845e 0.5px, #221d10 0.5px);
+            background-image: radial-gradient(#f78dbb 0.5px, transparent 0.5px), radial-gradient(#f78dbb 0.5px, #221d10 0.5px);
             opacity: 0.05;
         }
     </style>
@@ -76,13 +76,13 @@
             class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-black/5 dark:border-white/5">
             <div
                 class="text-[#1c180d] dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
-                <a href="index.html"><span class="material-symbols-outlined">arrow_back_ios_new</span></a>
+                <a href="./"><span class="material-symbols-outlined">arrow_back_ios_new</span></a>
             </div>
             <h2
                 class="text-[#1c180d] dark:text-white text-base font-bold leading-tight tracking-tight flex-1 text-center">
                 Milad Meriah 21th</h2>
             <div class="flex w-10 items-center justify-end">
-                <button
+                <button id="share-button"
                     class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1c180d] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                     <span class="material-symbols-outlined">share</span>
                 </button>
@@ -93,25 +93,27 @@
             <div class="px-4 py-4">
                 <div class="relative bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[340px] shadow-lg group"
                     data-alt="Happy families celebrating together at an outdoor event"
-                    style='background-image: linear-gradient(0deg, rgba(34, 29, 16, 0.8) 0%, rgba(0, 0, 0, 0) 50%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjajopPDq8z8pP5sSI_M21W0efKRdGcDbSNvivYjuJ4BiFSwb8Rt_3je5YYU5SzOYNz4tYB0j0xBP8UDAe8ONMLl4t4OtAC5bynTARdFfRNCaRfBdL2f4ntPsNnvNOPBo_xgMzSlvLYtfG_l_SQ_MUXj1UbfGTojKWZvsczE0-nKP8pEt4zONx8x4XxUOhgt4DQKWhGHfCCHrFPWf6zi7UZMdYLafLJ_JlRkwBffwtW1YGpiRaimvwRnP5kpRIKJG2X6Q8cgUAYFie");'>
+                    style='background-image: linear-gradient(0deg, rgba(34, 29, 16, 0.7) 0%, rgba(0, 0, 0, 0) 50%), url("foto-removebg-preview.png"), url("SD Anak Saleh.png"); background-position: center, bottom right, center; background-size: cover, contain, cover; background-repeat: no-repeat;'>
                     <div
                         class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                        EST. 2003
+                        14 Februari 2026
                     </div>
                     <div class="p-6">
-                        <p class="text-primary font-bold text-sm tracking-[0.2em] uppercase mb-1">Parenting Excellence
+                        <p class="text-primary font-bold text-sm tracking-[0.2em] uppercase mb-1">Parenting
                         </p>
-                        <h1 class="text-white tracking-tight text-3xl font-extrabold leading-tight">Nurturing Hearts
-                            &amp; Minds</h1>
+                        <h1 class="text-white tracking-tight text-3xl font-extrabold leading-tight">Milad Meriah 21th
+                            SD Anak Saleh</h1>
                     </div>
                 </div>
             </div>
             <!-- HeadlineText -->
             <div class="px-4 text-center">
                 <h2 class="text-[#1c180d] dark:text-white tracking-tight text-2xl font-bold leading-tight pb-2 pt-4">
-                    Celebrating 21 Years of Joy</h2>
-                <p class="text-sm text-[#1c180d]/60 dark:text-white/60 max-w-xs mx-auto">Join us at SD Anak Saleh for a
-                    milestone celebration dedicated to excellence in parenting and student growth.</p>
+                    Merayakan 21 Tahun</h2>
+                <p class="text-sm text-[#1c180d]/60 dark:text-white/60 max-w-xs mx-auto">
+                    Bergabunglah bersama kami di SD Anak Saleh untuk a
+                    perayaan tonggak sejarah yang didedikasikan untuk keunggulan dalam pengasuhan anak dan pertumbuhan
+                    siswa.</p>
             </div>
             <!-- Timer -->
             <div class="flex gap-3 py-6 px-4">
@@ -152,23 +154,19 @@
                     <div class="flex items-center gap-4">
                         <div class="size-14 rounded-full bg-cover bg-center border-2 border-primary"
                             data-alt="A portrait of the school principal smiling"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzlIZHZgVl5bhIvnBFiIwezw1hrvJ5tfglb8baMFYy7v32u_nEzmKS26J5E7-cnAIJjvggHti4UNSAEebxP_aRfFhC0IbIv2E-3chkN0_Tv6mw8FR2K1a82sKhP9ZEq8QvAqVZIlQv2z6JVCI4_aozZroTruw0pnYx7AJl7KaBdpZea9CTcY5GSU6ZQciJxFvtIyI8F-fwsVBf73hRQcPit83F98mf_h_2e2NvYUTuE9OEiIjTNlkVD9PgGn_XiJ6IgNA6lvDAE4rL");'>
+                            style='background-image: url("foto (1).jpeg");'>
                         </div>
                         <div>
-                            <p class="text-[#1c180d] dark:text-white text-lg font-bold leading-tight">Hj. Siti Rahma,
-                                M.Pd</p>
-                            <p class="text-primary text-xs font-semibold uppercase tracking-wide">School Principal</p>
+                            <p class="text-[#1c180d] dark:text-white text-lg font-bold leading-tight">Ustadz Suhadi
+                                Fadjaray</p>
+                            <p class="text-primary text-xs font-semibold uppercase tracking-wide">Parenting & Konsultan
+                                Pendidikan</p>
                         </div>
                     </div>
                     <p class="text-[#1c180d]/80 dark:text-white/80 text-sm italic leading-relaxed">
-                        "Welcome to our 21st anniversary. We are honored to grow together with parents in empowering our
-                        children for a bright, noble future."
+                        Beliau adalah seorang Penulis Buku "Harmoni Cinta Madrasah Keluarga" dan juga seorang
+                        Motivator Pendidikan.
                     </p>
-                    <button
-                        class="flex items-center justify-center gap-2 rounded-xl h-10 px-4 bg-primary/10 dark:bg-primary/20 text-[#1c180d] dark:text-primary text-sm font-bold w-full transition-all hover:bg-primary/20">
-                        <span>Read Full Message</span>
-                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                    </button>
                 </div>
             </div>
             <!-- Event Highlights Grid -->
@@ -190,8 +188,7 @@
                             <span class="text-[10px] font-bold text-[#1c180d]/40 dark:text-white/40 uppercase">08:00 -
                                 11:30 WIB</span>
                         </div>
-                        <p class="text-[#1c180d] dark:text-white text-base font-bold leading-tight mb-1">Parenting
-                            Excellence</p>
+                        <p class="text-[#1c180d] dark:text-white text-base font-bold leading-tight mb-1">Parenting</p>
                         <p class="text-[#1c180d]/60 dark:text-white/60 text-xs line-clamp-2">Mendidik anak di era
                             digital bersama narasumber ahli.</p>
                     </div>
@@ -222,7 +219,7 @@
                 <div class="rounded-2xl overflow-hidden bg-white dark:bg-[#2c2618] shadow-sm border border-black/5">
                     <div class="h-32 w-full bg-[#f4f0e7] relative">
                         <iframe width="100%" height="100%" frameborder="0" style="border:0"
-                            src="https://maps.google.com/maps?q=Fakultas+Ilmu+Komputer+Universitas+Brawijaya&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1975.717835927711!2d112.6154547!3d-7.9538486!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7883b162900545%3A0x661e5c20aa7727be!2sGedung%20G%20FILKOM%20UB!5e0!3m2!1sid!2sid!4v1768790924525!5m2!1sid!2sid"
                             allowfullscreen>
                         </iframe>
                     </div>
@@ -333,7 +330,7 @@
                         <div class="space-y-1">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Bukti
-                                Pembayaran</label>
+                                Infaq</label>
                             <div class="relative">
                                 <input type="file" name="payment_proof" required accept="image/*,application/pdf"
                                     class="w-full text-sm text-[#1c180d] dark:text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
@@ -356,6 +353,19 @@
 
     <script type="module" src="js/registration.js"></script>
     <script src="js/three-bg.js"></script>
+    <script>
+        document.getElementById('share-button').addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Milad Meriah 21th',
+                    text: 'Bergabunglah bersama kami di SD Anak Saleh untuk merayakan 21 Tahun Milad Meriah 21th',
+                    url: 'https://sekolahanaksaleh-mm21th.web.app'
+                })
+            } else {
+                alert('Share not supported')
+            }
+        })
+    </script>
 </body>
 
 </html>

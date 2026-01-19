@@ -36,8 +36,8 @@ function initThreeBackground() {
 
     // Check for dark mode to adjust colors
     const isDarkMode = document.documentElement.classList.contains('dark');
-    const primaryColor = 0xed845e; // #ed845e
-    const secondaryColor = isDarkMode ? 0xffffff : 0xed845e;
+    const primaryColor = 0xffabab; // 	#ffabab
+    const secondaryColor = isDarkMode ? 0xffffff : 0xffabab;
 
     // Objects
     const group = new THREE.Group();
