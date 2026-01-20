@@ -299,85 +299,84 @@ function renderTable(data) {
                 </div>
             </td>
             <td class="px-6 py-4 align-top">
-                <div class="flex flex-col gap-1">
+                <div class="flex flex-wrap gap-1 max-w-[200px]">
                     ${(row.child_name || '').split(',').map(child =>
-            `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary w-fit">
+            `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary border border-primary/20">
                             ${child.trim()}
                         </span>`
         ).join('')}
                 </div>
             </td>
-            <td class="px-6 py-4 align-top">
-                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${attendanceClass}">
+            <td class="px-6 py-4 align-top whitespace-nowrap">
+                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${attendanceClass} border border-black/5">
                     ${attendanceLabel}
                 </span>
             </td>
             <td class="px-6 py-4 align-top">
-                <div class="flex flex-col gap-1 text-sm">
-                    <a href="https://wa.me/${(row.phone || '').replace(/^0/, '62').replace(/\D/g, '')}" target="_blank" class="flex items-center gap-1 hover:text-green-500 transition-colors">
+                <div class="flex flex-col gap-1 text-xs">
+                    <a href="https://wa.me/${(row.phone || '').replace(/^0/, '62').replace(/\D/g, '')}" target="_blank" class="flex items-center gap-1 hover:text-green-500 transition-colors font-medium">
                         <span class="material-symbols-outlined text-sm">chat</span>
                         ${row.phone || '-'}
                     </a>
-                    <a href="mailto:${row.email}" class="flex items-center gap-1 hover:text-blue-500 transition-colors text-[#1c180d]/60 dark:text-white/60 text-xs">
+                    <a href="mailto:${row.email}" class="flex items-center gap-1 hover:text-blue-500 transition-colors text-[#1c180d]/60 dark:text-white/60">
                         <span class="material-symbols-outlined text-sm">mail</span>
                         ${row.email || '-'}
                     </a>
                 </div>
             </td>
-            <td class="px-6 py-4 align-top">
-                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${row.infaq_status === 'yes' || row.proof_url ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+            <td class="px-6 py-4 align-top whitespace-nowrap">
+                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${row.infaq_status === 'yes' || row.proof_url ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'} border border-black/5">
                     ${row.infaq_status === 'yes' || row.proof_url ? 'Yes' : 'No'}
                 </span>
             </td>
             <td class="px-6 py-4 align-top">
                 ${row.proof_url ? `
-                    <button onclick="window.previewImage('${row.proof_url}')" class="relative group/img overflow-hidden rounded-lg w-16 h-12 bg-gray-100 border border-black/10">
+                    <button onclick="window.previewImage('${row.proof_url}')" class="relative group/img overflow-hidden rounded-lg w-12 h-12 bg-gray-100 border border-black/10 shrink-0">
                         <img src="${row.proof_url}" alt="Proof" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity">
                             <span class="material-symbols-outlined text-white text-lg">visibility</span>
                         </div>
                     </button>
-                ` : '<span class="text-xs text-[#1c180d]/40">No proof</span>'}
+                ` : '<span class="text-xs text-[#1c180d]/40 italic">Empty</span>'}
             </td>
-            <td class="px-6 py-4 align-top">
+            <td class="px-6 py-4 align-top whitespace-nowrap">
                 ${row.payment_status === 'verified' ? `
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
                         <span class="material-symbols-outlined text-sm mr-1">check_circle</span>
                         Verified
                     </span>
                 ` : `
-                    <div class="flex flex-col gap-2">
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 w-fit">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-200">
                             <span class="material-symbols-outlined text-sm mr-1">pending</span>
                             Pending
                         </span>
-                        <div class="flex gap-1">
+                        <div class="flex gap-1" title="Quick Verify">
                             <button onclick="window.verifyPayment(${row.id}, 'verified')" 
-                                class="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-bold transition-colors"
-                                title="Approve">
-                                ✓
+                                class="w-6 h-6 flex items-center justify-center bg-green-50 text-green-600 hover:bg-green-500 hover:text-white rounded border border-green-200 transition-colors">
+                                <span class="material-symbols-outlined text-sm">check</span>
                             </button>
                             <button onclick="window.verifyPayment(${row.id}, 'rejected')" 
-                                class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-bold transition-colors"
-                                title="Reject">
-                                ✗
+                                class="w-6 h-6 flex items-center justify-center bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded border border-red-200 transition-colors">
+                                <span class="material-symbols-outlined text-sm">close</span>
                             </button>
                         </div>
                     </div>
                 `}
             </td>
-                <div class="flex justify-end gap-2">
-                    <button onclick="window.viewTicket(${row.id})" class="text-[#1c180d]/40 hover:text-blue-600 transition-colors" title="Download E-Ticket">
-                         <span class="material-symbols-outlined">download</span>
+            <td class="px-6 py-4 align-top">
+                <div class="flex items-center justify-start gap-1">
+                    <button onclick="window.viewTicket(${row.id})" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Download E-Ticket">
+                         <span class="material-symbols-outlined text-xl">download</span>
                     </button>
-                    <button onclick="window.sendTicket(${row.id})" class="text-[#1c180d]/40 hover:text-green-600 transition-colors" title="Send E-Ticket (WA)">
-                         <span class="material-symbols-outlined">confirmation_number</span>
+                    <button onclick="window.sendTicket(${row.id})" class="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="Send E-Ticket (WA)">
+                         <span class="material-symbols-outlined text-xl">confirmation_number</span>
                     </button>
-                    <button onclick="window.openEditModal(${row.id})" class="text-[#1c180d]/40 hover:text-primary transition-colors" title="Edit">
-                        <span class="material-symbols-outlined">edit</span>
+                    <button onclick="window.openEditModal(${row.id})" class="p-1.5 text-[#1c180d]/60 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit">
+                        <span class="material-symbols-outlined text-xl">edit</span>
                     </button>
-                    <button onclick="window.deleteRegistration(${row.id})" class="text-[#1c180d]/40 hover:text-red-500 transition-colors" title="Delete">
-                        <span class="material-symbols-outlined">delete</span>
+                    <button onclick="window.deleteRegistration(${row.id})" class="p-1.5 text-[#1c180d]/60 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                        <span class="material-symbols-outlined text-xl">delete</span>
                     </button>
                 </div>
             </td>
