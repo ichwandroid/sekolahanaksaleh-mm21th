@@ -78,10 +78,11 @@
     <!-- Typography Section -->
     <div class="text-center space-y-4 max-w-sm">
       <h1 class="text-[#1b110e] dark:text-white tracking-tight text-[32px] font-bold leading-tight">
-        Smart Parenting<br> Anak Saleh
+        Smart Edu-Parenting<br> Anak Saleh
       </h1>
       <p class="text-[#1b110e]/70 dark:text-[#f8f6f6]/70 text-base font-normal leading-relaxed">
-        Menyambut Milad Meriah 21th SD Anak Saleh mengadakan acara parenting yang berfokus pada mengoptimalkan tumbuh kembang serta karakter buah hati tersayang.
+        Menyambut Milad Meriah 21th SD Anak Saleh mengadakan acara parenting yang berfokus pada mengoptimalkan tumbuh
+        kembang serta karakter buah hati tersayang.
       </p>
     </div>
     <!-- Page Indicators -->
@@ -93,13 +94,19 @@
   <footer class="relative z-10 p-8 space-y-4">
     <a href="landing-page"
       class="w-full bg-primary hover:bg-[#ffabab] text-white text-lg font-bold py-4 px-8 rounded-full shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
-      Daftar sebagai peserta Parenting
+      Daftar sebagai peserta Smart Edu-Parenting
       <span class="material-symbols-outlined text-xl">arrow_forward</span>
     </a>
     <a href="https://wa.me/6287700938754" target="_blank"
       class="w-full bg-secondary hover:bg-[#b9b4c7] text-white text-lg font-bold py-4 px-8 rounded-full shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
       Daftar sebagai Sponsorship
       <span class="material-symbols-outlined text-xl">arrow_forward</span>
+    </a>
+    <a id="bazar-btn" href="https://wa.me/6287700938754" target="_blank"
+      class="w-full bg-secondary hover:bg-[#b9b4c7] text-white text-lg font-bold py-4 px-8 rounded-full shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+      <span>Daftar sebagai peserta Bazar</span>
+      <span id="bazar-icon" class="material-symbols-outlined text-xl">arrow_forward</span>
+      <span id="bazar-countdown" class="hidden text-base font-medium bg-black/10 px-3 py-1 rounded-lg"></span>
     </a>
     <!-- iOS Home Indicator Safe Area Spacer -->
     <div class="h-4"></div>
@@ -108,6 +115,57 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="js/gsap-animations.js"></script>
   <script src="js/three-bg.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bazarBtn = document.getElementById('bazar-btn');
+      const countdownEl = document.getElementById('bazar-countdown');
+      const arrowIcon = document.getElementById('bazar-icon');
+
+      // Target date: Feb 9, 2026 00:00:00
+      const targetDate = new Date('2026-02-09T00:00:00');
+
+      function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+          // Time is up, enable button
+          bazarBtn.classList.remove('pointer-events-none', 'opacity-50', 'grayscale');
+          bazarBtn.classList.add('hover:bg-[#b9b4c7]', 'shadow-lg');
+
+          countdownEl.classList.add('hidden');
+          arrowIcon.classList.remove('hidden');
+
+          // Ensure href is set
+          if (!bazarBtn.getAttribute('href')) {
+            bazarBtn.href = "https://wa.me/6287700938754";
+          }
+          return;
+        }
+
+        // Time is not up, disable button
+        bazarBtn.classList.add('pointer-events-none', 'opacity-50', 'grayscale');
+        bazarBtn.classList.remove('hover:bg-[#b9b4c7]', 'shadow-lg');
+        bazarBtn.removeAttribute('href'); // Remove href to prevent clicking
+
+        arrowIcon.classList.add('hidden');
+        countdownEl.classList.remove('hidden');
+
+        // Calculate time parts
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        countdownEl.textContent = `${days} Hari ${hours} Jam ${minutes} Menit ${seconds} Detik`;
+      }
+
+      // Initial call
+      updateCountdown();
+      // Update every second
+      setInterval(updateCountdown, 1000);
+    });
+  </script>
 </body>
 
 </html>
