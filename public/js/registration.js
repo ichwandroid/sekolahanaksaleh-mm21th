@@ -1,16 +1,20 @@
-import { SUPABASE_URL, SUPABASE_KEY } from './supabase-config.js';
+// Supabase Configuration loaded from supabase-config.js
 // Check if variables are set
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.warn('Supabase URL and Key not set in js/registration.js');
+// Check if variables are set
+const supabaseUrl = window.SUPABASE_URL;
+const supabaseKey = window.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+    console.warn('Supabase URL and Key not set in js/registration.js. Make sure js/supabase-config.js is loaded.');
 }
 
-const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+const supabaseClient = (window.supabase && supabaseUrl && supabaseKey) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
 // Connection Test
 // Connection Test
-if (supabase) {
+if (supabaseClient) {
     console.log('Testing Supabase Connection...');
-    supabase.from('registrations').select('count', { count: 'exact', head: true })
+    supabaseClient.from('registrations').select('count', { count: 'exact', head: true })
         .then(({ count, error }) => {
             if (error) {
                 console.error('Supabase Connection Failed:', error.message);
@@ -27,7 +31,7 @@ if (supabase) {
 }
 
 // Mock Data for Students (Replace with real DB fetch if available)
-const STUDENTS_DATA = {
+window.STUDENTS_DATA = {
     "1A": ["Akmal Hafizh Rivandra", "Afiqah Callista Safaqila", "Maher Hamizan Xavier Raziq", "Bellatrix Ruby Ailova", "Raisya Maulida Zahra", "Humaira Latifa Wibawa", "Anindyaswari Mahira Utomo", "Qalesya Rayhana Adicahya", "Irzaim Abbad Zaki", "Muadz Xavier Athallah", "Rashdansyah Rayyan Azhami", "Aghnia Cyrauza Ramadhan", "Naureen Mafaza Khairani", "Keyzia Zhafira Pramudita", "Abimana Dewangga Dimas", "Muhammad Syarif Hidayatullah", "Ahsan Muhammad Dipa", "Abayomi Natadwija Ahmad", "Muhammad Daffa Arvano Adhitama", "Abrizam Khairunnas Rafisqy", "Kimora Alisya Jasmine", "Akira Gilang Bagaskara", "Marvelia Ameera Hafidzah Wulur", "Shanum Rizki Azzahra", "Hanania Farah Nabila", "Muhammad Adzka Arzaki", "Arkhan Dhanadipati Tiya Prawiro", "Kiemas Arjun Mangku Hasan", "Mimosa Shahia Inshi", "Muhammad Al Fatih Syihab"].sort(),
     "1B": ["Pramudita Nursyifa Aisha", "Aisyah Ambar Pambayun", "Muhammad Arsya Fahrezi", "Muhammad Iqbal Al Azzam Asyadzilly", "Eilynn Raniah Adn", "Adzkira Zulaikha Putri Santoso", "Syafiq Eleno Yusuf", "Feisya Putri Maheswari", "Mikarai Attaki Pribadi", "Muhammad Arkan Nur Wahid", "Sabina Khanza Augustania Putri", "Rasya Frinizar Naufal Afkar", "Tengku Arlana Arsenio Alqawii", "Shanum Hayyin Althafunnisa", "Ahmad Azmi Adnani", "Afnan Muhammad Dhanurendra", "Hanindhiya Nafilah Az Zahra", "Raffazka Athariz Hamizan Andromeda", "Fatima Dyra Azzahra", "Ebony Arkatama Hindarsyah", "Safiyyah Nur Amira Permata", "Khalisa Amizafirah", "Arsenio Putra Wardhana", "Diajeng Jennaira Rumi", "Abizar Alvino Azkandra", "Maulana Khalif Putra Arifin", "Aurellia Kaylee Maheswari Ramadhani", "Hazrina Anandya Azzahra", "Malik Abdur Rohiman", "Abidzar Arrazi Wicaksono"].sort(),
     "1C": ["Aqmar Izza Pramudana", "Reddy Arsakha Johar", "Aluna Gantaribumi Darmawan", "Arkawangi Larasati Majid", "Aiza Khairania Zanna", "Shirin Nusaybah", "Syafia Ishma Tsaqifah", "Wina Rahmatul Dhuha", "Arkenzo Ziandro Khanza Susilo", "Muhammad Hanif Raffasya", "Bondan Aurora Zhafirah", "Abraham Ahmad Gibran Rabbani", "Faradila Dinda Azalia", "Muhammad Sirojul Azmi Afandi", "Kalandra Rashad Mustofa", "Ferzha Razqa Raffasya", "Ghezia Zara Alhamda", "Ezio Fathan Alfarizi", "Yumna Sabira Luvena", "Zivana Aulia Putri Ariyanto", "Arrayyan Azka Arvinza", "Agam Izar Prasetyo", "Khanza Syifa Azahra", "Aiza Aqsha Samanhudi", "Muhammad Husain Basalamah", "Zavier Aktam Dzakiandra", "Irish Aqila Indrabayu", "Nurdaffa Arhabu Rizqi", "Mahera Ansherlo Adjiwisaka", "Azlan Khalid Pua Jiwa"].sort(),
@@ -54,7 +58,9 @@ const STUDENTS_DATA = {
     "6D": ["Zivanna Kioko", "Fadhil Anwar Kurniawan", "Nabila Qaireen Almaira Zahra", "Halwa Majdah Izzah", "Bashar Mahesa Emir Akhmad", "Arsya Zarin Ashalina", "Rakha Sahl Zada", "Febrianne Illiyin Sakhi", "Aiko Shadrina Zhufairah", "Senandung Lembayung Senja", "Nadira Ramadina", "Muhamad Al-Fatih Kusumo Subagyo", "Aisha Farah", "Muhammad Ivan Azka Athallah", "Ahmad Nabil Al Akbar Amirullah Asy Syafi'I", "Rahajeng Aira Prawiradita", "Dzakiyah Ghina Rachma", "Naveda Alesha Rifaya", "Muhammad Fabian Rasya Pradipta", "Muhammad Athar Al Naja", "Rayyandra Abyan Afkhar", "Allysia Hana Mori", "Queena Sita Putri Nurhadhy", "Zahid Zubair", "Alfa Syauqi Alaika Muhammad", "Asyifa Kaysha Almeira", "Letisha Adriana Viano", "Razqa Atharayandra"].sort()
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+
+window.initRegistration = function () {
+    console.log('Initializing Registration Script...');
     const btnRegister = document.getElementById('btn-register-cta');
     const modal = document.getElementById('registration-modal');
     const btnClose = document.getElementById('btn-close-modal');
@@ -139,44 +145,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Modal Logic
-    const toggleInfaq = document.getElementById('toggle-infaq');
+    // Infaq Logic (Radio Buttons)
+    const infaqRadios = document.querySelectorAll('input[name="infaq_status"]');
     const infaqContainer = document.getElementById('infaq-container');
 
-    if (toggleInfaq && infaqContainer) {
+    if (infaqRadios.length > 0 && infaqContainer) {
         const fileInput = infaqContainer.querySelector('input[type="file"]');
 
-        toggleInfaq.addEventListener('change', () => {
-            if (toggleInfaq.checked) {
-                infaqContainer.classList.remove('hidden');
-                if (window.gsap) {
-                    gsap.fromTo(infaqContainer,
-                        { height: 0, opacity: 0, marginTop: 0 },
-                        { height: 'auto', opacity: 1, marginTop: '12px', duration: 0.3, ease: 'power2.out' }
-                    );
-                }
-            } else {
-                if (window.gsap) {
-                    gsap.to(infaqContainer, {
-                        height: 0,
-                        opacity: 0,
-                        marginTop: 0,
-                        duration: 0.3,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            infaqContainer.classList.add('hidden');
-                            if (fileInput) fileInput.value = '';
-                        }
-                    });
+        infaqRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const isYes = e.target.value === 'yes';
+
+                if (isYes) {
+                    infaqContainer.classList.remove('hidden');
+                    if (window.gsap) {
+                        gsap.fromTo(infaqContainer,
+                            { height: 0, opacity: 0, marginTop: 0 },
+                            { height: 'auto', opacity: 1, marginTop: '12px', duration: 0.3, ease: 'power2.out' }
+                        );
+                    }
                 } else {
-                    infaqContainer.classList.add('hidden');
-                    if (fileInput) fileInput.value = '';
+                    if (window.gsap) {
+                        gsap.to(infaqContainer, {
+                            height: 0,
+                            opacity: 0,
+                            marginTop: 0,
+                            duration: 0.3,
+                            ease: 'power2.in',
+                            onComplete: () => {
+                                infaqContainer.classList.add('hidden');
+                                if (fileInput) fileInput.value = '';
+                            }
+                        });
+                    } else {
+                        infaqContainer.classList.add('hidden');
+                        if (fileInput) fileInput.value = '';
+                    }
                 }
-            }
+            });
         });
     }
 
     // Modal Logic
-    function openModal() {
+    function openModal(e) {
+        if (e) e.preventDefault();
+        console.log('Opening Modal...');
         modal.classList.remove('hidden');
         // Trigger reflow to enable transition
         void modal.offsetWidth;
@@ -201,7 +214,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnRegister) {
+        console.log('Button Register Found, adding listener');
         btnRegister.addEventListener('click', openModal);
+    } else {
+        console.error('Button Register (btn-register-cta) NOT FOUND');
     }
 
     if (btnClose) {
@@ -217,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            if (!supabase) {
+            if (!supabaseClient) {
                 alert('Supabase not configured. Please set SUPABASE_URL and SUPABASE_KEY in js/registration.js');
                 return;
             }
@@ -265,14 +281,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                     const filePath = `${fileName}`;
 
-                    const { error: uploadError } = await supabase.storage
+                    const { error: uploadError } = await supabaseClient.storage
                         .from('registration-proofs')
                         .upload(filePath, file);
 
                     if (uploadError) throw uploadError;
 
                     // Get Public URL
-                    const { data: { publicUrl } } = supabase.storage
+                    const { data: { publicUrl } } = supabaseClient.storage
                         .from('registration-proofs')
                         .getPublicUrl(filePath);
 
@@ -287,11 +303,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     phone: formData.get('phone'),
                     email: formData.get('email'),
                     attendance: formData.get('attendance'), // Capture attendance
+                    infaq_status: formData.get('infaq_status'),
                     proof_url: proofUrl,
                     created_at: new Date().toISOString()
                 };
 
-                const { data: insertedData, error: insertError } = await supabase
+                const { data: insertedData, error: insertError } = await supabaseClient
                     .from('registrations')
                     .insert([data])
                     .select(); // Select to get the ID
@@ -359,7 +376,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.initRegistration);
+} else {
+    window.initRegistration();
+}
+
 
 // Helper: Generate Ticket Image
 async function generateTicket(data, proofImgUrl) {
@@ -549,6 +574,16 @@ function validateForm(formData) {
     const phoneRegex = /^(\+62|62|0)8[1-9][0-9]{6,11}$/;
     if (!phoneRegex.test(phone)) {
         throw new Error("Nomor WhatsApp tidak valid (Gunakan format 08xx/62xx).");
+    }
+
+    // Infaq validation
+    const infaqStatus = formData.get('infaq_status');
+    const paymentProof = formData.get('payment_proof');
+
+    if (infaqStatus === 'yes') {
+        if (!paymentProof || paymentProof.size === 0) {
+            throw new Error("Mohon upload bukti transfer infaq.");
+        }
     }
 
     // Email validation

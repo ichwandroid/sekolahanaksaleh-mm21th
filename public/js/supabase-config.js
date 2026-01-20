@@ -1,2 +1,3 @@
-export const SUPABASE_URL = 'https://gduolkkjqwodzrvgzcrm.supabase.co';
-export const SUPABASE_KEY = 'sb_publishable_fpVpwvcdexhwdvRhAdiZNg_ydpGm06q';
+// Supabase Configuration (Global Variables)
+window.SUPABASE_URL = 'https://gduolkkjqwodzrvgzcrm.supabase.co';
+window.SUPABASE_KEY = 'sb_publishable_fpVpwvcdexhwdvRhAdiZNg_ydpGm06q';

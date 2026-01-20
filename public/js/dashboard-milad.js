@@ -1,8 +1,11 @@
-import { SUPABASE_URL, SUPABASE_KEY } from './supabase-config.js';
+// Initialize Supabase - Using global variables from supabase-config.js
+// No imports needed since we use <script src="js/supabase-config.js"> in HTML
 
-// Initialize Supabase
-const supabase = (window.supabase && SUPABASE_URL && SUPABASE_KEY)
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+const supabaseUrl = window.SUPABASE_URL;
+const supabaseKey = window.SUPABASE_KEY;
+
+const supabaseClient = (window.supabase && supabaseUrl && supabaseKey)
+    ? window.supabase.createClient(supabaseUrl, supabaseKey)
     : null;
 
 const tableBody = document.getElementById('registrations-table-body');
@@ -30,7 +33,7 @@ window.deleteRegistration = async (id) => {
 
     try {
         // We select the deleted row to ensure it was actually deleted
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('registrations')
             .delete()
             .eq('id', id)
@@ -54,7 +57,7 @@ window.deleteRegistration = async (id) => {
                 const fileName = urlParts[urlParts.length - 1];
 
                 if (fileName) {
-                    const { error: storageError } = await supabase.storage
+                    const { error: storageError } = await supabaseClient.storage
                         .from('registration-proofs')
                         .remove([fileName]);
 
@@ -116,7 +119,7 @@ editForm.addEventListener('submit', async (e) => {
     };
 
     try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('registrations')
             .update(updates)
             .eq('id', id);
@@ -189,7 +192,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // Fetch Data
 async function fetchRegistrations() {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('Supabase not configured');
         tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-red-500">Supabase not configured. Check console.</td></tr>`;
         return;
@@ -199,7 +202,7 @@ async function fetchRegistrations() {
         refreshBtn.disabled = true;
         refreshBtn.innerHTML = '<span class="animate-spin material-symbols-outlined text-sm">sync</span> Loading...';
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('registrations')
             .select('*')
             .order('created_at', { ascending: false });
@@ -285,6 +288,11 @@ function renderTable(data) {
                         ${row.email || '-'}
                     </a>
                 </div>
+            </td>
+            <td class="px-6 py-4 align-top">
+                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${row.infaq_status === 'yes' || row.proof_url ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+                    ${row.infaq_status === 'yes' || row.proof_url ? 'Yes' : 'No'}
+                </span>
             </td>
             <td class="px-6 py-4 align-top">
                 ${row.proof_url ? `
