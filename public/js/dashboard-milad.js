@@ -148,6 +148,41 @@ editForm.addEventListener('submit', async (e) => {
 
 
 
+// Send E-Ticket (WhatsApp)
+window.sendTicket = (id) => {
+    const data = allRegistrations.find(r => r.id === id);
+    if (!data) return;
+
+    if (!data.phone) {
+        alert('No phone number available for this registrant.');
+        return;
+    }
+
+    // Format phone number
+    let phone = data.phone.replace(/\D/g, '');
+    if (phone.startsWith('0')) phone = '62' + phone.slice(1);
+
+    // Message Content
+    const message = `Assalamualaikum Wr. Wb.
+
+Terima kasih Ayah/Bunda *${data.father_name} / ${data.mother_name}* telah mendaftar di acara *Milad Meriah 21th SD Anak Saleh*.
+
+Data Pendaftaran:
+Anak: ${data.child_name}
+Kehadiran: ${data.attendance || '-'}
+Status: ${data.payment_status === 'verified' ? 'Terverifikasi ✅' : 'Menunggu Verifikasi ⏳'}
+
+Silakan simpan pesan ini sebagai bukti pendaftaran.
+E-Ticket Anda akan diverifikasi di meja registrasi.
+
+Sampai jumpa di lokasi!
+Wassalamualaikum Wr. Wb.`;
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+};
+
+
 // Format Date Helper
 function formatDate(dateString) {
     if (!dateString) return '-';
@@ -331,8 +366,13 @@ function renderTable(data) {
                     </div>
                 `}
             </td>
-            <td class="px-6 py-4 align-top text-right">
                 <div class="flex justify-end gap-2">
+                    <button onclick="window.viewTicket(${row.id})" class="text-[#1c180d]/40 hover:text-blue-600 transition-colors" title="Download E-Ticket">
+                         <span class="material-symbols-outlined">download</span>
+                    </button>
+                    <button onclick="window.sendTicket(${row.id})" class="text-[#1c180d]/40 hover:text-green-600 transition-colors" title="Send E-Ticket (WA)">
+                         <span class="material-symbols-outlined">confirmation_number</span>
+                    </button>
                     <button onclick="window.openEditModal(${row.id})" class="text-[#1c180d]/40 hover:text-primary transition-colors" title="Edit">
                         <span class="material-symbols-outlined">edit</span>
                     </button>
@@ -395,6 +435,223 @@ window.previewImage = (url) => {
 
 // Refresh Button
 refreshBtn.addEventListener('click', fetchRegistrations);
+
+// View/Download Ticket
+window.viewTicket = async (id) => {
+    const data = allRegistrations.find(r => r.id === id);
+    if (!data) return;
+
+    try {
+        const ticketData = {
+            father: data.father_name,
+            mother: data.mother_name,
+            children: data.child_name,
+            phone: data.phone,
+            email: data.email,
+            attendance: data.attendance,
+            id: data.id,
+            date: new Date(data.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+        };
+
+        // Use proof_url as the image source for the ticket
+        const ticketUrl = await generateTicket(ticketData, data.proof_url);
+
+        // Open in new tab (or download)
+        // Opening generated base64 URL in new tab might remain blank in some browsers due to security
+        // So we create a temporary image in a modal or force download.
+
+        // Option A: Force Download
+        const link = document.createElement('a');
+        link.href = ticketUrl;
+        link.download = `E-Ticket_Milad21_${data.phone}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (err) {
+        console.error('Error generating ticket:', err);
+        alert('Could not generate ticket. ' + err.message);
+    }
+};
+
+// Helper: Generate Ticket Image (Identical to registration.js)
+async function generateTicket(data, proofImgUrl) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800;
+    canvas.height = 1200;
+
+    // Background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Header Background
+    ctx.fillStyle = '#ed845e';
+    ctx.fillRect(0, 0, canvas.width, 180);
+
+    // Load and draw logo
+    try {
+        const logo = new Image();
+        logo.crossOrigin = "Anonymous";
+        await new Promise((resolve, reject) => {
+            logo.onload = resolve;
+            logo.onerror = reject;
+            logo.src = './SD Anak Saleh.png';
+        });
+        // Draw logo on the left side
+        ctx.drawImage(logo, 40, 40, 100, 100);
+    } catch (e) {
+        console.warn('Logo failed to load:', e);
+    }
+
+    // Header Text (positioned to the right of logo)
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 42px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('E-TICKET PARENTING', 160, 75);
+    ctx.font = '24px sans-serif';
+    ctx.fillText('MILAD 21 TAHUN SD ANAK SALEH', 160, 115);
+
+    // QR Code Generation
+    try {
+        const qrData = JSON.stringify({ id: data.id, checkin: true });
+        const qrUrl = await QRCode.toDataURL(qrData, { width: 200, margin: 1, color: { dark: '#1c180d', light: '#ffffff' } });
+        const qrImg = new Image();
+        await new Promise((resolve) => {
+            qrImg.onload = resolve;
+            qrImg.src = qrUrl;
+        });
+        // Draw QR Code Top Right
+        ctx.drawImage(qrImg, canvas.width - 180, 20, 140, 140);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(data.id.toString().slice(0, 8).toUpperCase(), canvas.width - 110, 170);
+
+    } catch (e) {
+        console.error('QR Gen Error:', e);
+    }
+
+    // Info Section
+    ctx.fillStyle = '#1c180d';
+    ctx.textAlign = 'left';
+
+    let y = 250;
+    const x = 50;
+    const lineHeight = 60;
+
+    // Title
+    ctx.font = 'bold 36px sans-serif';
+    ctx.fillText('DETAIL PENDAFTARAN', x, y);
+
+    // Line separator
+    ctx.strokeStyle = '#ed845e';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(x, y + 20);
+    ctx.lineTo(canvas.width - x, y + 20);
+    ctx.stroke();
+
+    y += 80;
+    ctx.font = '24px sans-serif'; // Label font
+
+    const drawField = (label, value) => {
+        ctx.fillStyle = '#888888';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText(label, x, y);
+
+        ctx.fillStyle = '#000000';
+        ctx.font = '28px sans-serif';
+        ctx.fillText(value || '-', x + 250, y);
+
+        y += lineHeight;
+    };
+
+    drawField('Tanggal', data.date);
+    drawField('Ayah', data.father);
+    drawField('Ibu', data.mother);
+
+    // Handle multi-line children
+    const childs = data.children.split(',');
+    ctx.fillStyle = '#888888';
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText('Anak', x, y);
+    ctx.fillStyle = '#000000';
+    ctx.font = '28px sans-serif';
+    childs.forEach((child, i) => {
+        ctx.fillText((i === 0 ? '' : '') + child.trim(), x + 250, y);
+        y += 40;
+    });
+    y += 20;
+
+    drawField('No HP', data.phone);
+    drawField('Email', data.email);
+
+    // Attendance Info
+    let attendanceText = '-';
+    if (data.attendance === 'ayah_saja') attendanceText = 'Ayah Saja';
+    else if (data.attendance === 'ibu_saja') attendanceText = 'Ibu Saja';
+    else if (data.attendance === 'ayah_bunda') attendanceText = 'Ayah & Bunda';
+
+    drawField('Hadir', attendanceText);
+
+    // Proof Section
+    y += 40;
+    ctx.fillStyle = '#1c180d';
+    ctx.font = 'bold 30px sans-serif';
+    ctx.fillText('BUKTI INFAQ', x, y);
+    y += 20;
+    // Line separator
+    ctx.beginPath();
+    ctx.moveTo(x, y + 10);
+    ctx.lineTo(canvas.width - x, y + 10);
+    ctx.stroke();
+
+    y += 50;
+
+    if (proofImgUrl) {
+        try {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            await new Promise((resolve, reject) => {
+                img.onload = resolve;
+                // If it takes too long or fails, we just skip drawing it
+                img.onerror = resolve;
+                img.src = proofImgUrl;
+            });
+
+            if (img.width > 0) {
+                const maxWidth = canvas.width - 100;
+                const maxHeight = 350;
+                const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                const w = img.width * ratio;
+                const h = img.height * ratio;
+                const imgX = (canvas.width - w) / 2;
+                ctx.drawImage(img, imgX, y, w, h);
+            }
+        } catch (e) {
+            ctx.fillStyle = '#888888';
+            ctx.font = 'italic 20px sans-serif';
+            ctx.fillText('(Gambar tidak dapat dimuat)', x, y + 30);
+        }
+    } else {
+        ctx.fillStyle = '#888888';
+        ctx.font = 'italic 20px sans-serif';
+        ctx.fillText('(Tidak ada bukti pembayaran)', x, y + 30);
+    }
+
+    // Footer
+    const footerY = canvas.height - 60;
+    ctx.fillStyle = '#ed845e';
+    ctx.fillRect(0, footerY - 40, canvas.width, 100);
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.font = 'italic 24px sans-serif';
+    ctx.fillText('Simpan tiket ini dan tunjukkan saat registrasi ulang.', canvas.width / 2, footerY + 10);
+
+    return canvas.toDataURL('image/jpeg', 0.85);
+}
 
 // Initial Load
 document.addEventListener('DOMContentLoaded', fetchRegistrations);
