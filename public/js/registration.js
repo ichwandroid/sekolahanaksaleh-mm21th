@@ -398,7 +398,7 @@ async function generateTicket(data, proofImgUrl) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Header Background
-    ctx.fillStyle = '#ed845e';
+    ctx.fillStyle = '#f78dbb';
     ctx.fillRect(0, 0, canvas.width, 180);
 
     // Load and draw logo
@@ -457,7 +457,7 @@ async function generateTicket(data, proofImgUrl) {
     ctx.fillText('DETAIL PENDAFTARAN', x, y);
 
     // Line separator
-    ctx.strokeStyle = '#ed845e';
+    ctx.strokeStyle = '#f78dbb';
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.moveTo(x, y + 20);
@@ -555,7 +555,7 @@ async function generateTicket(data, proofImgUrl) {
 
     // Footer
     const footerY = canvas.height - 60;
-    ctx.fillStyle = '#ed845e';
+    ctx.fillStyle = '#f78dbb';
     ctx.fillRect(0, footerY - 40, canvas.width, 100);
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
