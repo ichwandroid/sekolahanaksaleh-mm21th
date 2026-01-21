@@ -957,10 +957,13 @@ window.initRegistration = function () {
         const div = document.createElement('div');
         div.className = 'flex gap-2 items-start opacity-0 transform translate-y-2 transition-all duration-300';
         const placeholder = index === 0 ? 'Nama yang akan hadir (otomatis dari Nama Lengkap)' : 'Nama orang kedua yang akan hadir';
+        const isReadOnly = index === 0 ? 'readonly' : '';
+        const bgClass = index === 0 ? 'bg-gray-100/50 cursor-not-allowed' : 'bg-[#f8f7f5]';
+
         div.innerHTML = `
             <div class="flex-1">
-                <input type="text" name="attendee_name_${index}" placeholder="${placeholder}" required
-                    class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-sm text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                <input type="text" name="attendee_name_${index}" placeholder="${placeholder}" required ${isReadOnly}
+                    class="w-full ${bgClass} dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-sm text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
             </div>
             ${index > 0 ? `<button type="button" class="btn-remove-attendee text-red-500 hover:text-red-700 p-2"><span class="material-symbols-outlined text-lg">delete</span></button>` : ''}
         `;
