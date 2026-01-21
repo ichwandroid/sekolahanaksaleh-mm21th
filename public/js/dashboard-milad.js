@@ -347,10 +347,17 @@ function updateStats() {
     totalStat.textContent = allRegistrations.length;
     const verified = allRegistrations.filter(r => r.payment_status === 'verified').length;
     const pending = allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending').length;
-    const attendance = allRegistrations.filter(r => r.attendees > 0).length;
+
+    // Sum the total number of people attending (each name in comma-separated list)
+    const totalAttendance = allRegistrations.reduce((acc, r) => {
+        if (!r.attendees) return acc;
+        const count = r.attendees.split(',').filter(name => name.trim().length > 0).length;
+        return acc + count;
+    }, 0);
+
     verifiedStat.textContent = verified;
     pendingStat.textContent = pending;
-    attendanceStat.textContent = attendance;
+    attendanceStat.textContent = totalAttendance;
 }
 
 // Filter Logic
@@ -358,7 +365,7 @@ function getFilteredData() {
     if (currentFilter === 'all') return allRegistrations;
     if (currentFilter === 'verified') return allRegistrations.filter(r => r.payment_status === 'verified');
     if (currentFilter === 'pending') return allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending');
-    if (currentFilter === 'attendance') return allRegistrations.filter(r => r.attendees > 0);
+    if (currentFilter === 'attendance') return allRegistrations.filter(r => r.attendees && r.attendees.trim().length > 0);
     return allRegistrations;
 }
 
@@ -568,7 +575,7 @@ function renderTable(data) {
             <td class="px-6 py-4 align-top">
                 <div class="flex flex-wrap gap-1 max-w-[200px]">
                     ${(row.child_name || '').split(',').map(child =>
-            `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+            `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border border-primary/20">
                             ${child.trim()}
                         </span>`
         ).join('')}
