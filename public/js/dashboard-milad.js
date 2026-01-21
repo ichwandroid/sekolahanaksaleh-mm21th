@@ -21,6 +21,115 @@ const exportBtn = document.getElementById('btn-export-csv');
 let allRegistrations = [];
 let currentFilter = 'all';
 
+// Custom Alert Logic
+const alertModal = document.getElementById('custom-alert-modal');
+const alertBackdrop = document.getElementById('alert-backdrop');
+const alertPanel = document.getElementById('alert-panel');
+const alertTitle = document.getElementById('alert-title');
+const alertMessage = document.getElementById('alert-message');
+const alertIcon = document.getElementById('alert-icon');
+const alertIconWrapper = document.getElementById('alert-icon-wrapper');
+const btnCloseAlert = document.getElementById('btn-close-alert');
+
+// Custom Confirm Logic
+const confirmModal = document.getElementById('custom-confirm-modal');
+const confirmBackdrop = document.getElementById('confirm-backdrop');
+const confirmPanel = document.getElementById('confirm-panel');
+const confirmTitle = document.getElementById('confirm-title');
+const confirmMessage = document.getElementById('confirm-message');
+const btnCancelConfirm = document.getElementById('btn-cancel-confirm');
+const btnOkConfirm = document.getElementById('btn-ok-confirm');
+
+window.showCustomAlert = function (title, message, type = 'info') {
+    if (!alertModal) {
+        alert(message); // Fallback
+        return;
+    }
+
+    alertTitle.innerText = title;
+    alertMessage.innerText = message;
+
+    // Reset classes
+    alertIconWrapper.className = 'p-4 rounded-full mb-2 border-4 border-white dark:border-[#2c2618] shadow-lg';
+    alertIcon.className = 'material-symbols-outlined text-4xl';
+    btnCloseAlert.className = 'w-full py-3 font-bold text-sm rounded-xl transition-transform active:scale-95 shadow-lg';
+
+    let iconName = 'info';
+
+    if (type === 'success') {
+        iconName = 'check_circle';
+        alertIconWrapper.classList.add('bg-green-100');
+        alertIcon.classList.add('text-green-600');
+        btnCloseAlert.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600', 'shadow-green-500/20');
+    } else if (type === 'error') {
+        iconName = 'error';
+        alertIconWrapper.classList.add('bg-red-100');
+        alertIcon.classList.add('text-red-600');
+        btnCloseAlert.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600', 'shadow-red-500/20');
+    } else if (type === 'warning') {
+        iconName = 'warning';
+        alertIconWrapper.classList.add('bg-amber-100');
+        alertIcon.classList.add('text-amber-600');
+        btnCloseAlert.classList.add('bg-amber-500', 'text-white', 'hover:bg-amber-600', 'shadow-amber-500/20');
+    } else {
+        // Info
+        iconName = 'info';
+        alertIconWrapper.classList.add('bg-primary/10');
+        alertIcon.classList.add('text-primary');
+        btnCloseAlert.classList.add('bg-primary', 'text-[#1c180d]', 'hover:bg-primary/90', 'shadow-primary/20');
+    }
+    alertIcon.innerText = iconName;
+
+    alertModal.classList.remove('hidden');
+    alertBackdrop.classList.remove('opacity-0');
+    alertPanel.classList.remove('opacity-0', 'scale-95');
+};
+
+function closeAlert() {
+    alertBackdrop.classList.add('opacity-0');
+    alertPanel.classList.add('opacity-0', 'scale-95');
+    setTimeout(() => {
+        alertModal.classList.add('hidden');
+    }, 300);
+}
+
+if (btnCloseAlert) {
+    btnCloseAlert.onclick = closeAlert;
+}
+if (alertBackdrop) {
+    alertBackdrop.onclick = closeAlert;
+}
+
+// Custom Confirm
+window.showCustomConfirm = function (title, message) {
+    return new Promise((resolve) => {
+        if (!confirmModal) {
+            resolve(confirm(message)); // Fallback
+            return;
+        }
+
+        confirmTitle.innerText = title;
+        confirmMessage.innerText = message;
+
+        confirmModal.classList.remove('hidden');
+        confirmBackdrop.classList.remove('opacity-0');
+        confirmPanel.classList.remove('opacity-0', 'scale-95');
+
+        const closeConfirm = (result) => {
+            confirmBackdrop.classList.add('opacity-0');
+            confirmPanel.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                confirmModal.classList.add('hidden');
+            }, 300);
+            resolve(result);
+        };
+
+        btnOkConfirm.onclick = () => closeConfirm(true);
+        btnCancelConfirm.onclick = () => closeConfirm(false);
+        confirmBackdrop.onclick = () => closeConfirm(false);
+    });
+};
+
 // Edit Modal Elements
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
@@ -29,7 +138,8 @@ const btnSaveEdit = document.getElementById('btn-save-edit');
 
 // Edit & Delete Logic (Global)
 window.deleteRegistration = async (id) => {
-    if (!confirm('Are you sure you want to delete this registration?')) return;
+    const confirmed = await window.showCustomConfirm('Konfirmasi Hapus', 'Apakah Anda yakin ingin menghapus data pendaftaran ini?');
+    if (!confirmed) return;
 
     try {
         // We select the deleted row to ensure it was actually deleted
@@ -77,11 +187,11 @@ window.deleteRegistration = async (id) => {
         updateStats();
         renderCharts(allRegistrations);
         renderTable(allRegistrations);
-        alert('Data deleted successfully.');
+        window.showCustomAlert('Berhasil', 'Data berhasil dihapus.', 'success');
 
     } catch (error) {
         console.error('Error deleting:', error);
-        alert('Failed to delete: ' + error.message + '\n\nHint: Check Supabase RLS policies.');
+        window.showCustomAlert('Gagal Menghapus', 'Gagal menghapus data: ' + error.message + '. Periksa Supabase RLS policies.', 'error');
     }
 };
 
@@ -97,6 +207,45 @@ window.openEditModal = (id) => {
     document.getElementById('edit-email').value = data.email;
 
     editModal.classList.remove('hidden');
+};
+
+function closeEditModal() {
+    editModal.classList.add('hidden');
+}
+
+if (btnCancelEdit) {
+    btnCancelEdit.addEventListener('click', closeEditModal);
+}
+
+// Verify Payment
+window.verifyPayment = async (id, status) => {
+    try {
+        const { error } = await supabaseClient
+            .from('registrations')
+            .update({ payment_status: status })
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Update local data
+        const index = allRegistrations.findIndex(r => r.id === id);
+        if (index !== -1) {
+            allRegistrations[index].payment_status = status;
+        }
+
+        updateStats();
+        renderTable(allRegistrations);
+
+        if (status === 'verified') {
+            window.showCustomAlert('Berhasil', 'Pembayaran berhasil diverifikasi!', 'success');
+        } else {
+            window.showCustomAlert('Berhasil', 'Pembayaran ditolak.', 'warning');
+        }
+
+    } catch (error) {
+        console.error('Error verifying payment:', error);
+        window.showCustomAlert('Gagal', 'Gagal memverifikasi pembayaran: ' + error.message, 'error');
+    }
 };
 
 // ... (Verification Logic omitted) ...
@@ -134,12 +283,12 @@ editForm.addEventListener('submit', async (e) => {
         renderCharts(allRegistrations);
         renderTable(allRegistrations);
         closeEditModal();
-        alert('Update successful!');
+        window.showCustomAlert('Berhasil', 'Data berhasil diperbarui!', 'success');
 
     } catch (error) {
         // ... error handling
         console.error('Error updating:', error);
-        alert('Failed to update: ' + error.message);
+        window.showCustomAlert('Gagal Memperbarui', 'Gagal memperbarui data: ' + error.message, 'error');
     } finally {
         btnSaveEdit.disabled = false;
         btnSaveEdit.innerHTML = btnText;
@@ -154,7 +303,7 @@ window.sendTicket = (id) => {
     if (!data) return;
 
     if (!data.phone) {
-        alert('No phone number available for this registrant.');
+        window.showCustomAlert('Info', 'Nomor telepon tidak tersedia untuk pendaftar ini.', 'warning');
         return;
     }
 
@@ -586,7 +735,7 @@ window.viewTicket = async (id) => {
 
     } catch (err) {
         console.error('Error generating ticket:', err);
-        alert('Could not generate ticket. ' + err.message);
+        window.showCustomAlert('Gagal', 'Tidak dapat membuat tiket: ' + err.message, 'error');
     }
 };
 

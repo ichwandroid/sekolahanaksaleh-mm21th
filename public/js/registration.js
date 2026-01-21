@@ -767,6 +767,105 @@ window.initRegistration = function () {
     const form = document.getElementById('registration-form');
     const submitBtn = document.getElementById('btn-submit-registration');
 
+    // Custom Alert Logic
+    const alertModal = document.getElementById('custom-alert-modal');
+    const alertBackdrop = document.getElementById('alert-backdrop');
+    const alertPanel = document.getElementById('alert-panel');
+    const alertTitle = document.getElementById('alert-title');
+    const alertMessage = document.getElementById('alert-message');
+    const alertIcon = document.getElementById('alert-icon');
+    const alertIconWrapper = document.getElementById('alert-icon-wrapper');
+    const btnCloseAlert = document.getElementById('btn-close-alert');
+
+    window.showCustomAlert = function (title, message, type = 'info') {
+        if (!alertModal) {
+            alert(message); // Fallback
+            return;
+        }
+
+        alertTitle.innerText = title;
+        alertMessage.innerText = message;
+
+        // Reset classes
+        alertIconWrapper.className = 'p-4 rounded-full mb-2 border-4 border-white dark:border-[#2c2618] shadow-lg';
+        alertIcon.className = 'material-symbols-outlined text-4xl';
+        btnCloseAlert.className = 'w-full py-3 font-bold text-sm rounded-xl transition-transform active:scale-95 shadow-lg';
+
+        let iconName = 'info';
+        let colorClass = 'primary';
+
+        if (type === 'success') {
+            iconName = 'check_circle';
+            alertIconWrapper.classList.add('bg-green-100');
+            alertIcon.classList.add('text-green-600');
+            btnCloseAlert.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600', 'shadow-green-500/20');
+        } else if (type === 'error') {
+            iconName = 'error';
+            alertIconWrapper.classList.add('bg-red-100');
+            alertIcon.classList.add('text-red-600');
+            btnCloseAlert.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600', 'shadow-red-500/20');
+        } else if (type === 'warning') {
+            iconName = 'warning';
+            alertIconWrapper.classList.add('bg-amber-100');
+            alertIcon.classList.add('text-amber-600');
+            btnCloseAlert.classList.add('bg-amber-500', 'text-white', 'hover:bg-amber-600', 'shadow-amber-500/20');
+        } else {
+            // Info
+            iconName = 'info';
+            alertIconWrapper.classList.add('bg-primary/10');
+            alertIcon.classList.add('text-primary');
+            btnCloseAlert.classList.add('bg-primary', 'text-[#1c180d]', 'hover:bg-primary/90', 'shadow-primary/20');
+        }
+        alertIcon.innerText = iconName;
+
+        alertModal.classList.remove('hidden');
+
+        // Animations
+        if (window.gsap) {
+            gsap.killTweensOf(alertPanel);
+            gsap.killTweensOf(alertBackdrop);
+
+            // Backdrop
+            gsap.fromTo(alertBackdrop, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+
+            // Panel
+            gsap.fromTo(alertPanel,
+                { scale: 0.8, opacity: 0, y: 20 },
+                { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "elastic.out(1, 0.75)" }
+            );
+        } else {
+            alertBackdrop.classList.remove('opacity-0');
+            alertPanel.classList.remove('opacity-0', 'scale-95');
+        }
+    };
+
+    function closeAlert() {
+        if (window.gsap) {
+            gsap.to(alertBackdrop, { opacity: 0, duration: 0.2 });
+            gsap.to(alertPanel, {
+                scale: 0.9,
+                opacity: 0,
+                duration: 0.2,
+                onComplete: () => {
+                    alertModal.classList.add('hidden');
+                }
+            });
+        } else {
+            alertBackdrop.classList.add('opacity-0');
+            alertPanel.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                alertModal.classList.add('hidden');
+            }, 300);
+        }
+    }
+
+    if (btnCloseAlert) {
+        btnCloseAlert.onclick = closeAlert;
+    }
+    if (alertBackdrop) {
+        alertBackdrop.onclick = closeAlert;
+    }
+
     // Children Management
     const childrenContainer = document.getElementById('children-container');
     const btnAddChild = document.getElementById('btn-add-child');
@@ -937,7 +1036,7 @@ window.initRegistration = function () {
             e.preventDefault();
 
             if (!supabaseClient) {
-                alert('Supabase not configured. Please set SUPABASE_URL and SUPABASE_KEY in js/registration.js');
+                window.showCustomAlert('Error Sistem', 'Supabase belum dikonfigurasi. Mohon cek file js/supabase-config.js', 'error');
                 return;
             }
 
@@ -961,7 +1060,7 @@ window.initRegistration = function () {
             });
 
             if (childrenList.length === 0) {
-                alert('Please add at least one child.');
+                window.showCustomAlert('Data Tidak Lengkap', 'Mohon tambahkan setidaknya satu data anak.', 'warning');
                 return;
             }
 
@@ -976,7 +1075,7 @@ window.initRegistration = function () {
             try {
                 validateForm(formData);
             } catch (validationError) {
-                alert(validationError.message);
+                window.showCustomAlert('Validasi Gagal', validationError.message, 'warning');
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
                 return;
@@ -1076,11 +1175,11 @@ window.initRegistration = function () {
                     }, 500);
                 }, 1500);
 
-                alert('Pendaftaran berhasil! Silahkan unduh E-Ticket Anda.');
+                window.showCustomAlert('Sukses!', 'Pendaftaran berhasil! Silahkan unduh E-Ticket Anda.', 'success');
 
             } catch (error) {
                 console.error('Error:', error);
-                alert('Pendaftaran gagal: ' + (error.message || 'Unknown error'));
+                window.showCustomAlert('Pendaftaran Gagal', 'Terjadi kesalahan: ' + (error.message || 'Unknown error'), 'error');
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
             }
@@ -1314,11 +1413,19 @@ window.copyToClipboard = (text, btnElement) => {
                 btnElement.classList.replace('bg-green-100', 'bg-primary/10');
             }, 2000);
         } else {
-            alert('Nomor tersalin!');
+            if (window.showCustomAlert) {
+                window.showCustomAlert('Berhasil', 'Nomor tersalin!', 'success');
+            } else {
+                alert('Nomor tersalin!');
+            }
         }
     }).catch(err => {
         console.error('Copy failed', err);
-        alert('Gagal menyalin.');
+        if (window.showCustomAlert) {
+            window.showCustomAlert('Gagal', 'Gagal menyalin text.', 'error');
+        } else {
+            alert('Gagal menyalin.');
+        }
     });
 };
 

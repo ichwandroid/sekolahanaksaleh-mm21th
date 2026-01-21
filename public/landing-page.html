@@ -318,6 +318,32 @@
     <script src="js/gsap-animations.js"></script>
     <script src="js/timer.js"></script>
 
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 z-[200] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="alert-backdrop">
+        </div>
+        <!-- Modal Panel -->
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-[#2c2618] rounded-3xl p-6 shadow-2xl w-full max-w-sm transform opacity-0 scale-95 transition-all duration-300 pointer-events-auto flex flex-col items-center text-center gap-4 border border-black/5 dark:border-white/5"
+                id="alert-panel">
+                <div id="alert-icon-wrapper" class="p-4 rounded-full bg-primary/10 mb-2">
+                    <span id="alert-icon" class="material-symbols-outlined text-4xl text-primary">info</span>
+                </div>
+                <div class="space-y-2">
+                    <h3 id="alert-title" class="text-xl font-bold text-[#1c180d] dark:text-white leading-tight">Title
+                    </h3>
+                    <p id="alert-message" class="text-sm text-[#1c180d]/60 dark:text-white/60 leading-relaxed">Message
+                        goes here.</p>
+                </div>
+                <button id="btn-close-alert"
+                    class="w-full py-3 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-sm rounded-xl transition-transform active:scale-95 shadow-lg shadow-primary/20">
+                    Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Registration Modal -->
     <div id="registration-modal" class="fixed inset-0 z-[150] hidden">
         <!-- Backdrop -->
@@ -520,7 +546,11 @@
                     url: 'https://sekolahanaksaleh-mm21th.web.app'
                 })
             } else {
-                alert('Share not supported')
+                if (window.showCustomAlert) {
+                    window.showCustomAlert('Info', 'Fitur Share tidak didukung pada browser ini.', 'info');
+                } else {
+                    alert('Share not supported');
+                }
             }
         })
     </script>
