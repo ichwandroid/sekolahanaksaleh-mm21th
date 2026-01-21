@@ -918,6 +918,7 @@ window.initRegistration = function () {
         if (removeBtn) {
             removeBtn.addEventListener('click', () => {
                 div.remove();
+                if (typeof updateAttendeeButton === 'function') updateAttendeeButton();
             });
         }
 
@@ -941,6 +942,7 @@ window.initRegistration = function () {
                 requestAnimationFrame(() => {
                     newRow.classList.remove('opacity-0', 'translate-y-2');
                 });
+                updateAttendeeButton();
             });
         }
     }
@@ -976,13 +978,28 @@ window.initRegistration = function () {
     }
 
     function updateAttendeeButton() {
-        if (attendeesContainer && btnAddAttendee) {
-            const count = attendeesContainer.children.length;
-            // Hide button if already 2 attendees
-            if (count >= 2) {
-                btnAddAttendee.style.display = 'none';
+        if (attendeesContainer && btnAddAttendee && childrenContainer) {
+            const attendeeCount = attendeesContainer.children.length;
+            const childrenCount = childrenContainer.children.length;
+
+            // Rule: If 1 child, only 1 attendee allowed. If > 1 child, max 2 attendees.
+            if (childrenCount > 1) {
+                if (attendeeCount >= 2) {
+                    btnAddAttendee.style.display = 'none';
+                } else {
+                    btnAddAttendee.style.display = 'flex';
+                }
             } else {
-                btnAddAttendee.style.display = 'flex';
+                // If only 1 child, no second attendee allowed
+                btnAddAttendee.style.display = 'none';
+
+                // If there's already a second attendee, remove it
+                if (attendeeCount > 1) {
+                    const secondRow = attendeesContainer.children[1];
+                    if (secondRow) {
+                        secondRow.remove();
+                    }
+                }
             }
         }
     }
