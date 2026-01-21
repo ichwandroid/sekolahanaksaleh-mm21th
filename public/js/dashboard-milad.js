@@ -203,6 +203,7 @@ window.openEditModal = (id) => {
     document.getElementById('edit-id').value = data.id;
     document.getElementById('edit-parent').value = data.parent_name;
     document.getElementById('edit-children').value = data.child_name;
+    document.getElementById('edit-attendees').value = data.attendees;
     // document.getElementById('edit-attendance').value = data.attendance || 'ayah_saja'; // Removed
     document.getElementById('edit-phone').value = data.phone;
     document.getElementById('edit-email').value = data.email;
@@ -262,6 +263,7 @@ editForm.addEventListener('submit', async (e) => {
     const updates = {
         parent_name: document.getElementById('edit-parent').value,
         child_name: document.getElementById('edit-children').value,
+        attendees: document.getElementById('edit-attendees').value,
         // attendance: document.getElementById('edit-attendance').value, // Removed
         phone: document.getElementById('edit-phone').value,
         email: document.getElementById('edit-email').value,
@@ -675,17 +677,18 @@ function renderTable(data) {
 if (exportBtn) {
     exportBtn.addEventListener('click', () => {
         const csv = [
-            ['Date', 'Parent', 'Children', 'Homebase', 'Phone', 'Email', 'Status'],
+            ['Date', 'Parent', 'Children', 'Attendees', 'Homebase', 'Phone', 'Email', 'Status'],
             ...allRegistrations.map(r => [
                 new Date(r.created_at).toLocaleDateString('id-ID'),
                 r.parent_name,
                 r.child_name,
+                r.attendees || '',
                 r.homebase || '', // New Column
                 r.phone,
                 r.email,
                 r.payment_status || 'pending'
             ])
-        ].map(row => row.join(',')).join('\n');
+        ].map(row => row.map(v => `"${(v || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
 
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
