@@ -13,6 +13,7 @@
         rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -100,6 +101,27 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Homebase Chart -->
+                <div
+                    class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
+                    <h3 class="font-bold text-lg mb-4 text-[#1c180d] dark:text-white">Homebase Distribution</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="homebaseChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Class Chart -->
+                <div
+                    class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
+                    <h3 class="font-bold text-lg mb-4 text-[#1c180d] dark:text-white">Class Distribution</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="classChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Data Table -->
@@ -139,7 +161,8 @@
                             <th class="px-6 py-4">Date</th>
                             <th class="px-6 py-4">Parents</th>
                             <th class="px-6 py-4">Children</th>
-                            <th class="px-6 py-4">Attendance</th>
+                            <th class="px-6 py-4">Homebase</th>
+                            <!-- Attendance Removed -->
                             <th class="px-6 py-4">Contact</th>
                             <th class="px-6 py-4">Infaq</th>
                             <th class="px-6 py-4">Proof</th>
@@ -184,17 +207,9 @@
 
                 <div class="space-y-1">
                     <label
-                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Father's
+                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Parent's
                         Name</label>
-                    <input type="text" id="edit-father" required
-                        class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
-                </div>
-
-                <div class="space-y-1">
-                    <label
-                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Mother's
-                        Name</label>
-                    <input type="text" id="edit-mother" required
+                    <input type="text" id="edit-parent" required
                         class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
                 </div>
 
@@ -206,16 +221,7 @@
                     <p class="text-[10px] text-[#1c180d]/40 ml-1">Example: Ahmad (1A), Budi (2B)</p>
                 </div>
 
-                <div class="space-y-1">
-                    <label
-                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Attendance</label>
-                    <select id="edit-attendance" required
-                        class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
-                        <option value="ayah_saja">Ayah Saja</option>
-                        <option value="ibu_saja">Ibu Saja</option>
-                        <option value="ayah_bunda">Ayah & Bunda</option>
-                    </select>
-                </div>
+
 
                 <div class="space-y-1">
                     <label

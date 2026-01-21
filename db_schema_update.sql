@@ -1,2 +1,2 @@
--- Run this command in your Supabase SQL Editor to fix the error:
-ALTER TABLE registrations ADD COLUMN attendance TEXT;
+-- Add homebase column to store the color separately
+ALTER TABLE registrations ADD COLUMN IF NOT EXISTS homebase TEXT;

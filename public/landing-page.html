@@ -341,16 +341,8 @@
                         <div class="space-y-1">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
-                                Ayah</label>
-                            <input type="text" name="father_name" required placeholder="Nama Lengkap Ayah"
-                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
-                        </div>
-
-                        <div class="space-y-1">
-                            <label
-                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
-                                Ibu</label>
-                            <input type="text" name="mother_name" required placeholder="Nama Lengkap Ibu"
+                                Lengkap</label>
+                            <input type="text" name="parent_name" required placeholder="Nama Lengkap Orang Tua"
                                 class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
                         </div>
 
@@ -384,60 +376,7 @@
                             </div>
                         </div>
 
-                        <!-- Attendance Confirmation Section -->
-                        <div class="space-y-3 pt-2">
-                            <label
-                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Konfirmasi
-                                Kehadiran</label>
-                            <div class="grid grid-cols-2 md:grid-cols-2 gap-3">
-                                <!-- Option 1: Ayah Saja -->
-                                <label class="cursor-pointer group relative">
-                                    <input type="radio" name="attendance" value="ayah_saja" class="peer sr-only"
-                                        required>
-                                    <div
-                                        class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex flex-col items-center justify-center gap-2">
-                                        <div
-                                            class="p-2 rounded-full bg-white dark:bg-[#2c2618] shadow-sm text-[#8FBAB2] group-hover:scale-110 transition-transform">
-                                            <span class="material-symbols-outlined">face</span>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Ayah</span>
-                                            <span
-                                                class="text-[9px] text-[#1c180d]/50 dark:text-white/50 leading-tight">Hanya
-                                                Ayah yang hadir</span>
-                                        </div>
-                                        <div
-                                            class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                                            <span
-                                                class="material-symbols-outlined text-primary text-base">check_circle</span>
-                                        </div>
-                                    </div>
-                                </label>
 
-                                <!-- Option 2: Ibu Saja -->
-                                <label class="cursor-pointer group relative">
-                                    <input type="radio" name="attendance" value="ibu_saja" class="peer sr-only">
-                                    <div
-                                        class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex flex-col items-center justify-center gap-2">
-                                        <div
-                                            class="p-2 rounded-full bg-white dark:bg-[#2c2618] shadow-sm text-primary group-hover:scale-110 transition-transform">
-                                            <span class="material-symbols-outlined">face_3</span>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Ibu</span>
-                                            <span
-                                                class="text-[9px] text-[#1c180d]/50 dark:text-white/50 leading-tight">Hanya
-                                                Ibu yang hadir</span>
-                                        </div>
-                                        <div
-                                            class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                                            <span
-                                                class="material-symbols-outlined text-primary text-base">check_circle</span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
 
                         <div class="space-y-3 pt-2">
                             <label
@@ -557,7 +496,7 @@
                 </form>
             </div>
 
-            
+
 
         </div>
     </div>

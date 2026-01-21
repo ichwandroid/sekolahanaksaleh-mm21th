@@ -75,6 +75,7 @@ window.deleteRegistration = async (id) => {
         // Remove from local array and re-render
         allRegistrations = allRegistrations.filter(r => r.id !== id);
         updateStats();
+        renderCharts(allRegistrations);
         renderTable(allRegistrations);
         alert('Data deleted successfully.');
 
@@ -89,10 +90,9 @@ window.openEditModal = (id) => {
     if (!data) return;
 
     document.getElementById('edit-id').value = data.id;
-    document.getElementById('edit-father').value = data.father_name;
-    document.getElementById('edit-mother').value = data.mother_name;
+    document.getElementById('edit-parent').value = data.parent_name;
     document.getElementById('edit-children').value = data.child_name;
-    document.getElementById('edit-attendance').value = data.attendance || 'ayah_saja'; // Default
+    // document.getElementById('edit-attendance').value = data.attendance || 'ayah_saja'; // Removed
     document.getElementById('edit-phone').value = data.phone;
     document.getElementById('edit-email').value = data.email;
 
@@ -110,10 +110,9 @@ editForm.addEventListener('submit', async (e) => {
     btnSaveEdit.innerHTML = 'Saving...';
 
     const updates = {
-        father_name: document.getElementById('edit-father').value,
-        mother_name: document.getElementById('edit-mother').value,
+        parent_name: document.getElementById('edit-parent').value,
         child_name: document.getElementById('edit-children').value,
-        attendance: document.getElementById('edit-attendance').value,
+        // attendance: document.getElementById('edit-attendance').value, // Removed
         phone: document.getElementById('edit-phone').value,
         email: document.getElementById('edit-email').value,
     };
@@ -132,6 +131,7 @@ editForm.addEventListener('submit', async (e) => {
             allRegistrations[index] = { ...allRegistrations[index], ...updates };
         }
 
+        renderCharts(allRegistrations);
         renderTable(allRegistrations);
         closeEditModal();
         alert('Update successful!');
@@ -165,11 +165,10 @@ window.sendTicket = (id) => {
     // Message Content
     const message = `Assalamualaikum Wr. Wb.
 
-Terima kasih Ayah/Bunda *${data.father_name} / ${data.mother_name}* telah mendaftar di acara *Milad Meriah 21th SD Anak Saleh*.
+Terima kasih Ayah/Bunda *${data.parent_name}* telah mendaftar di acara *Milad Meriah 21th SD Anak Saleh*.
 
 Data Pendaftaran:
 Anak: ${data.child_name}
-Kehadiran: ${data.attendance || '-'}
 Status: ${data.payment_status === 'verified' ? 'Terverifikasi ✅' : 'Menunggu Verifikasi ⏳'}
 
 Silakan simpan pesan ini sebagai bukti pendaftaran.
@@ -246,6 +245,7 @@ async function fetchRegistrations() {
 
         allRegistrations = data || [];
         updateStats();
+        renderCharts(allRegistrations);
         renderTable(allRegistrations);
 
     } catch (error) {
@@ -265,6 +265,105 @@ async function fetchRegistrations() {
     }
 }
 
+// Chart Instances
+let homebaseChartInstance = null;
+let classChartInstance = null;
+
+function renderCharts(data) {
+    // Process Homebase Data
+    const homebaseCounts = { 'Merah': 0, 'Kuning': 0, 'Hijau': 0, 'Biru': 0, 'Ungu': 0 };
+
+    // Process Class Data
+    const classCounts = {};
+
+    data.forEach(row => {
+        // Homebase
+        if (row.homebase) {
+            row.homebase.split(',').forEach(hb => {
+                const key = hb.trim();
+                if (homebaseCounts.hasOwnProperty(key)) {
+                    homebaseCounts[key]++;
+                }
+            });
+        }
+
+        // Class
+        if (row.child_name) {
+            row.child_name.split(',').forEach(child => {
+                const match = child.match(/\((.*?)\)/);
+                if (match && match[1]) {
+                    const cls = match[1].trim();
+                    classCounts[cls] = (classCounts[cls] || 0) + 1;
+                }
+            });
+        }
+    });
+
+    // Homebase Chart
+    const ctxHb = document.getElementById('homebaseChart').getContext('2d');
+    if (homebaseChartInstance) homebaseChartInstance.destroy();
+
+    homebaseChartInstance = new Chart(ctxHb, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(homebaseCounts),
+            datasets: [{
+                label: 'Peserta',
+                data: Object.values(homebaseCounts),
+                backgroundColor: [
+                    '#ef4444', // Merah
+                    '#eab308', // Kuning
+                    '#22c55e', // Hijau
+                    '#3b82f6', // Biru
+                    '#a855f7'  // Ungu
+                ],
+                borderWidth: 0,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    // Class Chart
+    const ctxCls = document.getElementById('classChart').getContext('2d');
+    if (classChartInstance) classChartInstance.destroy();
+
+    // Sort classes alphanumeric (1A, 1B, 2A...)
+    const sortedClasses = Object.keys(classCounts).sort();
+
+    classChartInstance = new Chart(ctxCls, {
+        type: 'bar',
+        data: {
+            labels: sortedClasses,
+            datasets: [{
+                label: 'Students per Class',
+                data: sortedClasses.map(c => classCounts[c]),
+                backgroundColor: '#f78dbb',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+}
+
 // Render Table
 function renderTable(data) {
     if (data.length === 0) {
@@ -273,20 +372,6 @@ function renderTable(data) {
     }
 
     tableBody.innerHTML = data.map(row => {
-        let attendanceLabel = '-';
-        let attendanceClass = 'bg-gray-100 text-gray-600';
-
-        if (row.attendance === 'ayah_saja') {
-            attendanceLabel = 'Ayah Saja';
-            attendanceClass = 'bg-blue-100 text-blue-700';
-        } else if (row.attendance === 'ibu_saja') {
-            attendanceLabel = 'Ibu Saja';
-            attendanceClass = 'bg-pink-100 text-pink-700';
-        } else if (row.attendance === 'ayah_bunda') {
-            attendanceLabel = 'Ayah & Bunda';
-            attendanceClass = 'bg-purple-100 text-purple-700';
-        }
-
         return `
         <tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors group">
             <td class="px-6 py-4 align-top whitespace-nowrap">
@@ -294,8 +379,7 @@ function renderTable(data) {
             </td>
             <td class="px-6 py-4 align-top">
                 <div class="flex flex-col">
-                    <span class="font-bold text-[#1c180d] dark:text-white">${row.father_name || '-'}</span>
-                    <span class="text-xs text-[#1c180d]/60 dark:text-white/60">Mother: ${row.mother_name || '-'}</span>
+                    <span class="font-bold text-[#1c180d] dark:text-white">${row.parent_name || '-'}</span>
                 </div>
             </td>
             <td class="px-6 py-4 align-top">
@@ -307,11 +391,22 @@ function renderTable(data) {
         ).join('')}
                 </div>
             </td>
-            <td class="px-6 py-4 align-top whitespace-nowrap">
-                <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${attendanceClass} border border-black/5">
-                    ${attendanceLabel}
-                </span>
+            <td class="px-6 py-4 align-top">
+                <div class="flex flex-wrap gap-1 max-w-[150px]">
+                     ${(row.homebase || '').split(',').map(hb => {
+            const colors = {
+                'Merah': 'bg-red-100 text-red-800 border-red-200',
+                'Kuning': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                'Hijau': 'bg-green-100 text-green-800 border-green-200',
+                'Biru': 'bg-blue-100 text-blue-800 border-blue-200',
+                'Ungu': 'bg-purple-100 text-purple-800 border-purple-200',
+            };
+            const colorClass = colors[hb.trim()] || 'bg-gray-100 text-gray-800 border-gray-200';
+            return hb.trim() ? `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${colorClass}">${hb.trim()}</span>` : '-';
+        }).join('')}
+                </div>
             </td>
+            <!-- Attendance Removed -->
             <td class="px-6 py-4 align-top">
                 <div class="flex flex-col gap-1 text-xs">
                     <a href="https://wa.me/${(row.phone || '').replace(/^0/, '62').replace(/\D/g, '')}" target="_blank" class="flex items-center gap-1 hover:text-green-500 transition-colors font-medium">
@@ -390,13 +485,12 @@ function renderTable(data) {
 if (exportBtn) {
     exportBtn.addEventListener('click', () => {
         const csv = [
-            ['Date', 'Father', 'Mother', 'Children', 'Attendance', 'Phone', 'Email', 'Status'],
+            ['Date', 'Parent', 'Children', 'Homebase', 'Phone', 'Email', 'Status'],
             ...allRegistrations.map(r => [
                 new Date(r.created_at).toLocaleDateString('id-ID'),
-                r.father_name,
-                r.mother_name,
+                r.parent_name,
                 r.child_name,
-                r.attendance || '-',
+                r.homebase || '', // New Column
                 r.phone,
                 r.email,
                 r.payment_status || 'pending'
@@ -417,8 +511,7 @@ if (exportBtn) {
 searchInput.addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     const filtered = allRegistrations.filter(row =>
-        (row.father_name || '').toLowerCase().includes(term) ||
-        (row.mother_name || '').toLowerCase().includes(term) ||
+        (row.parent_name || '').toLowerCase().includes(term) ||
         (row.child_name || '').toLowerCase().includes(term) ||
         (row.phone || '').includes(term) ||
         (row.email || '').toLowerCase().includes(term)
@@ -442,12 +535,11 @@ window.viewTicket = async (id) => {
 
     try {
         const ticketData = {
-            father: data.father_name,
-            mother: data.mother_name,
+            parent_name: data.parent_name,
             children: data.child_name,
             phone: data.phone,
             email: data.email,
-            attendance: data.attendance,
+            // attendance: data.attendance, // Removed
             id: data.id,
             date: new Date(data.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
         };
@@ -568,8 +660,8 @@ async function generateTicket(data, proofImgUrl) {
     };
 
     drawField('Tanggal', data.date);
-    drawField('Ayah', data.father);
-    drawField('Ibu', data.mother);
+    drawField('Nama Lengkap', data.parent_name);
+    // drawField('Ibu', data.mother); // Removed
 
     // Handle multi-line children
     const childs = data.children.split(',');
@@ -587,13 +679,7 @@ async function generateTicket(data, proofImgUrl) {
     drawField('No HP', data.phone);
     drawField('Email', data.email);
 
-    // Attendance Info
-    let attendanceText = '-';
-    if (data.attendance === 'ayah_saja') attendanceText = 'Ayah Saja';
-    else if (data.attendance === 'ibu_saja') attendanceText = 'Ibu Saja';
-    else if (data.attendance === 'ayah_bunda') attendanceText = 'Ayah & Bunda';
-
-    drawField('Hadir', attendanceText);
+    // Attendance Info Removed
 
     // Proof Section
     y += 40;
