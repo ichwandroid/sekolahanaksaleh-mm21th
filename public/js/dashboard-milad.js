@@ -17,6 +17,7 @@ const searchInput = document.getElementById('search-input');
 const imageModal = document.getElementById('image-modal');
 const modalImage = document.getElementById('modal-image');
 const exportBtn = document.getElementById('btn-export-csv');
+const attendanceStat = document.getElementById('stat-attendance');
 
 let allRegistrations = [];
 let currentFilter = 'all';
@@ -346,8 +347,10 @@ function updateStats() {
     totalStat.textContent = allRegistrations.length;
     const verified = allRegistrations.filter(r => r.payment_status === 'verified').length;
     const pending = allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending').length;
+    const attendance = allRegistrations.filter(r => r.attendees > 0).length;
     verifiedStat.textContent = verified;
     pendingStat.textContent = pending;
+    attendanceStat.textContent = attendance;
 }
 
 // Filter Logic
@@ -355,6 +358,7 @@ function getFilteredData() {
     if (currentFilter === 'all') return allRegistrations;
     if (currentFilter === 'verified') return allRegistrations.filter(r => r.payment_status === 'verified');
     if (currentFilter === 'pending') return allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending');
+    if (currentFilter === 'attendance') return allRegistrations.filter(r => r.attendees > 0);
     return allRegistrations;
 }
 
@@ -554,6 +558,11 @@ function renderTable(data) {
             <td class="px-6 py-4 align-top">
                 <div class="flex flex-col">
                     <span class="font-bold text-[#1c180d] dark:text-white">${row.parent_name || '-'}</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 align-top">
+                <div class="flex flex-col">
+                    <span class="font-bold text-[#1c180d] dark:text-white">${row.attendees || '-'}</span>
                 </div>
             </td>
             <td class="px-6 py-4 align-top">

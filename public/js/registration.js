@@ -945,8 +945,99 @@ window.initRegistration = function () {
         }
     }
 
+    // Attendees Management
+    const attendeesContainer = document.getElementById('attendees-container');
+    const btnAddAttendee = document.getElementById('btn-add-attendee');
+    let autoFillSetup = false; // Flag to track if auto-fill is already setup
 
-    // Modal Logic
+
+    function createAttendeeRow(index) {
+        const div = document.createElement('div');
+        div.className = 'flex gap-2 items-start opacity-0 transform translate-y-2 transition-all duration-300';
+        const placeholder = index === 0 ? 'Nama yang akan hadir (otomatis dari Nama Lengkap)' : 'Nama orang kedua yang akan hadir';
+        div.innerHTML = `
+            <div class="flex-1">
+                <input type="text" name="attendee_name_${index}" placeholder="${placeholder}" required
+                    class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-sm text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+            </div>
+            ${index > 0 ? `<button type="button" class="btn-remove-attendee text-red-500 hover:text-red-700 p-2"><span class="material-symbols-outlined text-lg">delete</span></button>` : ''}
+        `;
+
+        const removeBtn = div.querySelector('.btn-remove-attendee');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                div.remove();
+                // Update button visibility
+                updateAttendeeButton();
+            });
+        }
+
+        return div;
+    }
+
+    function updateAttendeeButton() {
+        if (attendeesContainer && btnAddAttendee) {
+            const count = attendeesContainer.children.length;
+            // Hide button if already 2 attendees
+            if (count >= 2) {
+                btnAddAttendee.style.display = 'none';
+            } else {
+                btnAddAttendee.style.display = 'flex';
+            }
+        }
+    }
+
+    // Initialize first attendee row
+    if (attendeesContainer) {
+        const firstRow = createAttendeeRow(0);
+        attendeesContainer.appendChild(firstRow);
+        // Animate in
+        requestAnimationFrame(() => {
+            firstRow.classList.remove('opacity-0', 'translate-y-2');
+        });
+
+        if (btnAddAttendee) {
+            btnAddAttendee.addEventListener('click', () => {
+                const count = attendeesContainer.children.length;
+                if (count < 2) { // Maximum 2 attendees
+                    const newRow = createAttendeeRow(count);
+                    attendeesContainer.appendChild(newRow);
+                    requestAnimationFrame(() => {
+                        newRow.classList.remove('opacity-0', 'translate-y-2');
+                    });
+                    updateAttendeeButton();
+                }
+            });
+        }
+        updateAttendeeButton();
+        setupAttendeeAutoFill();
+    }
+
+    // Setup auto-fill for first attendee from parent name
+    function setupAttendeeAutoFill() {
+        if (autoFillSetup) return; // Already setup
+
+        const parentNameInput = document.querySelector('input[name="parent_name"]');
+        const firstAttendeeInput = attendeesContainer?.querySelector('input[name="attendee_name_0"]');
+
+        if (parentNameInput && firstAttendeeInput) {
+            // Sync on parent name change
+            parentNameInput.addEventListener('input', (e) => {
+                const currentFirstAttendee = attendeesContainer?.querySelector('input[name="attendee_name_0"]');
+                if (currentFirstAttendee) {
+                    currentFirstAttendee.value = e.target.value;
+                }
+            });
+
+            // Initial sync if parent name already has value
+            if (parentNameInput.value) {
+                firstAttendeeInput.value = parentNameInput.value;
+            }
+
+            autoFillSetup = true;
+        }
+    }
+
     // Infaq Logic (Radio Buttons)
     const infaqRadios = document.querySelectorAll('input[name="infaq_status"]');
     const infaqContainer = document.getElementById('infaq-container');
@@ -1064,6 +1155,23 @@ window.initRegistration = function () {
                 return;
             }
 
+            // Gather Attendees Data
+            const attendeeRows = attendeesContainer.querySelectorAll('.flex');
+            const attendeesList = [];
+
+            attendeeRows.forEach(row => {
+                const input = row.querySelector('input[name^="attendee_name"]');
+                if (input && input.value.trim()) {
+                    attendeesList.push(input.value.trim());
+                }
+            });
+
+            if (attendeesList.length === 0) {
+                window.showCustomAlert('Data Tidak Lengkap', 'Mohon isi nama orang yang akan hadir.', 'warning');
+                return;
+            }
+
+
             // Set Loading State
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<span class="animate-spin material-symbols-outlined">progress_activity</span> Processing...';
@@ -1112,7 +1220,7 @@ window.initRegistration = function () {
                     homebase: homebasesList.join(', '), // Save to new column
                     phone: formData.get('phone'),
                     email: formData.get('email'),
-                    // attendance: formData.get('attendance'), // Removed
+                    attendees: attendeesList.join(', '), // Save attendees names
                     infaq_status: formData.get('infaq_status'),
                     proof_url: proofUrl,
                     created_at: new Date().toISOString()
@@ -1137,15 +1245,20 @@ window.initRegistration = function () {
                     form.reset();
                     childrenContainer.innerHTML = '';
                     childrenContainer.appendChild(createChildRow(0));
+                    attendeesContainer.innerHTML = '';
+                    attendeesContainer.appendChild(createAttendeeRow(0));
+                    updateAttendeeButton();
+                    setupAttendeeAutoFill();
+
 
                     // Generate Professional Ticket
                     try {
                         const ticketData = {
                             parent_name: data.parent_name,
                             children: data.child_name,
+                            attendees: data.attendees,
                             phone: data.phone,
                             email: data.email,
-                            // attendance: data.attendance, // Removed
                             id: registrationId, // Pass ID for QR Code
                             date: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
                         };
@@ -1307,7 +1420,21 @@ async function generateTicket(data, proofImgUrl) {
     drawField('No HP', data.phone);
     drawField('Email', data.email);
 
-    // Attendance Info Removed
+    // Attendees Info
+    if (data.attendees) {
+        const attendees = data.attendees.split(',');
+        ctx.fillStyle = '#888888';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('Yang Hadir', x, y);
+        ctx.fillStyle = '#000000';
+        ctx.font = '28px sans-serif';
+        attendees.forEach((attendee, i) => {
+            ctx.fillText(attendee.trim(), x + 250, y);
+            y += 40;
+        });
+        y += 20;
+    }
+
 
     // Proof Section
     y += 40;
@@ -1362,7 +1489,14 @@ async function generateTicket(data, proofImgUrl) {
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.font = 'italic 24px sans-serif';
+
+    // Calculate number of attendees
+    const attendeeCount = data.attendees ? data.attendees.split(',').length : 0;
+    const attendeeText = attendeeCount > 0 ? `Tiket ini berlaku untuk ${attendeeCount} orang sesuai nama yang terdaftar` : 'Tiket ini berlaku untuk sesuai nama yang terdaftar';
+
+    ctx.fillText(attendeeText, canvas.width / 2, footerY - 10);
     ctx.fillText('Simpan tiket ini dan tunjukkan saat registrasi ulang.', canvas.width / 2, footerY + 10);
+
 
     return canvas.toDataURL('image/jpeg', 0.85);
 }

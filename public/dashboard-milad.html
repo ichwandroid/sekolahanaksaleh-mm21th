@@ -64,7 +64,7 @@
         </header>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
                 <div class="flex items-center gap-4">
                     <div class="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -98,6 +98,18 @@
                         <p class="text-xs text-[#1c180d]/60 dark:text-white/60 font-bold uppercase tracking-wider">
                             Pending</p>
                         <p id="stat-pending" class="text-2xl font-bold font-display">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
+                <div class="flex items-center gap-4">
+                    <div class="size-12 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
+                        <span class="material-symbols-outlined">check_circle</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-[#1c180d]/60 dark:text-white/60 font-bold uppercase tracking-wider">
+                            Registration Attendance</p>
+                        <p id="stat-attendance" class="text-2xl font-bold font-display">-</p>
                     </div>
                 </div>
             </div>
@@ -162,6 +174,7 @@
                         <tr>
                             <th class="px-6 py-4">Date</th>
                             <th class="px-6 py-4">Parents</th>
+                            <th class="px-6 py-4">Reg Attendance</th>
                             <th class="px-6 py-4">Children</th>
                             <th class="px-6 py-4">Homebase</th>
                             <!-- Attendance Removed -->
