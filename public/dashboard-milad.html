@@ -102,24 +102,26 @@
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <!-- Homebase Chart -->
-                <div
-                    class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
-                    <h3 class="font-bold text-lg mb-4 text-[#1c180d] dark:text-white">Homebase Distribution</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="homebaseChart"></canvas>
-                    </div>
-                </div>
 
-                <!-- Class Chart -->
-                <div
-                    class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
-                    <h3 class="font-bold text-lg mb-4 text-[#1c180d] dark:text-white">Class Distribution</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="classChart"></canvas>
-                    </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Homebase Chart -->
+            <div
+                class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 lg:col-span-1">
+                <h3 class="font-bold text-lg mb-4 text-[#1c180d] dark:text-white">Homebase Distribution</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="homebaseChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Class Chart -->
+            <div
+                class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 lg:col-span-2">
+                <h3 class="font-bold text-lg mb-4 text-[#1c180d] dark:text-white">Class Distribution</h3>
+                <div class="relative h-64 w-full">
+                    <canvas id="classChart"></canvas>
                 </div>
             </div>
         </div>

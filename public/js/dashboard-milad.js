@@ -318,14 +318,24 @@ function renderCharts(data) {
                     '#a855f7'  // Ungu
                 ],
                 borderWidth: 0,
-                borderRadius: 4
+                borderRadius: 8,
+                barPercentage: 0.6
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1, precision: 0 },
+                    grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                    border: { display: false }
+                },
+                x: {
+                    grid: { display: false },
+                    border: { display: false }
+                }
             },
             plugins: {
                 legend: { display: false }
@@ -340,22 +350,37 @@ function renderCharts(data) {
     // Sort classes alphanumeric (1A, 1B, 2A...)
     const sortedClasses = Object.keys(classCounts).sort();
 
+    // Create Gradient for Class Chart
+    const gradient = ctxCls.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, '#f78dbb');
+    gradient.addColorStop(1, '#f472b6');
+
     classChartInstance = new Chart(ctxCls, {
         type: 'bar',
         data: {
             labels: sortedClasses,
             datasets: [{
-                label: 'Students per Class',
+                label: 'Students',
                 data: sortedClasses.map(c => classCounts[c]),
-                backgroundColor: '#f78dbb',
-                borderRadius: 4
+                backgroundColor: gradient,
+                borderRadius: 4,
+                barPercentage: 0.7
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1, precision: 0 },
+                    grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                    border: { display: false }
+                },
+                x: {
+                    grid: { display: false },
+                    border: { display: false }
+                }
             },
             plugins: {
                 legend: { display: false }
