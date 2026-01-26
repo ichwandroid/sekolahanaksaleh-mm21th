@@ -16,6 +16,10 @@ const refreshBtn = document.getElementById('btn-refresh');
 const searchInput = document.getElementById('search-input');
 const imageModal = document.getElementById('image-modal');
 const modalImage = document.getElementById('modal-image');
+const imageModalBackdrop = document.getElementById('image-modal-backdrop');
+const imageModalPanel = document.getElementById('image-modal-panel');
+const btnCloseImage = document.getElementById('btn-close-image');
+const btnDownloadImage = document.getElementById('btn-download-image');
 const exportBtn = document.getElementById('btn-export-csv');
 const attendanceStat = document.getElementById('stat-attendance');
 
@@ -714,9 +718,56 @@ searchInput.addEventListener('input', (e) => {
 
 // Image Preview Helper (Global)
 window.previewImage = (url) => {
+    if (!imageModal || !modalImage) return;
+    
     modalImage.src = url;
     imageModal.classList.remove('hidden');
+    
+    // Trigger animations
+    setTimeout(() => {
+        imageModalBackdrop.classList.remove('opacity-0');
+        imageModalPanel.classList.remove('opacity-0', 'scale-95');
+    }, 10);
 };
+
+function closeImageModal() {
+    if (!imageModal) return;
+    
+    imageModalBackdrop.classList.add('opacity-0');
+    imageModalPanel.classList.add('opacity-0', 'scale-95');
+    
+    setTimeout(() => {
+        imageModal.classList.add('hidden');
+        modalImage.src = ''; // Clear src
+    }, 300);
+}
+
+async function downloadImage() {
+    const url = modalImage.src;
+    if (!url) return;
+    
+    try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `bukti-pembayaran-${Date.now()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+        console.error('Download failed:', err);
+        window.showCustomAlert('Gagal', 'Gagal mengunduh gambar. Silakan coba klik kanan dan "Save Image As".', 'error');
+    }
+}
+
+// Image Modal Event Listeners
+if (btnCloseImage) btnCloseImage.onclick = closeImageModal;
+if (imageModalBackdrop) imageModalBackdrop.onclick = closeImageModal;
+if (btnDownloadImage) btnDownloadImage.onclick = downloadImage;
 
 // Refresh Button
 refreshBtn.addEventListener('click', fetchRegistrations);
