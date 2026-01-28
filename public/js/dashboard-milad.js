@@ -22,6 +22,7 @@ const btnCloseImage = document.getElementById('btn-close-image');
 const btnDownloadImage = document.getElementById('btn-download-image');
 const exportBtn = document.getElementById('btn-export-csv');
 const attendanceStat = document.getElementById('stat-attendance');
+const infaqStat = document.getElementById('stat-infaq');
 
 let allRegistrations = [];
 let currentFilter = 'all';
@@ -211,6 +212,7 @@ window.openEditModal = (id) => {
     // document.getElementById('edit-attendance').value = data.attendance || 'ayah_saja'; // Removed
     document.getElementById('edit-phone').value = data.phone;
     document.getElementById('edit-email').value = data.email;
+    document.getElementById('edit-nominal').value = data.nominal || '';
 
     editModal.classList.remove('hidden');
 };
@@ -271,6 +273,7 @@ editForm.addEventListener('submit', async (e) => {
         // attendance: document.getElementById('edit-attendance').value, // Removed
         phone: document.getElementById('edit-phone').value,
         email: document.getElementById('edit-email').value,
+        nominal: document.getElementById('edit-nominal').value,
     };
 
     try {
@@ -361,9 +364,15 @@ function updateStats() {
         return acc + count;
     }, 0);
 
+    const totalInfaq = allRegistrations.reduce((acc, r) => {
+        const val = parseFloat(r.nominal) || 0;
+        return acc + val;
+    }, 0);
+
     verifiedStat.textContent = verified;
     pendingStat.textContent = pending;
     attendanceStat.textContent = totalAttendance;
+    infaqStat.textContent = 'Rp ' + totalInfaq.toLocaleString('id-ID');
 }
 
 // Filter Logic
@@ -372,6 +381,7 @@ function getFilteredData() {
     if (currentFilter === 'verified') return allRegistrations.filter(r => r.payment_status === 'verified');
     if (currentFilter === 'pending') return allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending');
     if (currentFilter === 'attendance') return allRegistrations.filter(r => r.attendees && r.attendees.trim().length > 0);
+    if (currentFilter === 'infaq') return allRegistrations.filter(r => r.nominal && Number(r.nominal) > 0);
     return allRegistrations;
 }
 
@@ -575,7 +585,7 @@ function renderTable(data) {
             </td>
             <td class="px-6 py-4 align-top">
                 <div class="flex flex-col">
-                    <span class="font-bold text-[#1c180d] dark:text-white">${row.attendees || '-'}</span>
+                    <span style="text-transform: capitalize;" class="font-bold text-[#1c180d] dark:text-white">${row.attendees || '-'}</span>
                 </div>
             </td>
             <td class="px-6 py-4 align-top">
@@ -618,6 +628,11 @@ function renderTable(data) {
             <td class="px-6 py-4 align-top whitespace-nowrap">
                 <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold ${row.infaq_status === 'yes' || row.proof_url ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'} border border-black/5">
                     ${row.infaq_status === 'yes' || row.proof_url ? 'Yes' : 'No'}
+                </span>
+            </td>
+            <td class="px-6 py-4 align-top whitespace-nowrap">
+                <span class="text-sm font-mono text-[#1c180d] dark:text-white">
+                    ${row.nominal ? 'Rp ' + Number(row.nominal).toLocaleString('id-ID') : '-'}
                 </span>
             </td>
             <td class="px-6 py-4 align-top">
@@ -681,7 +696,7 @@ function renderTable(data) {
 if (exportBtn) {
     exportBtn.addEventListener('click', () => {
         const csv = [
-            ['Date', 'Parent', 'Children', 'Attendees', 'Homebase', 'Phone', 'Email', 'Status'],
+            ['Date', 'Parent', 'Children', 'Attendees', 'Homebase', 'Phone', 'Email', 'Nominal', 'Status'],
             ...allRegistrations.map(r => [
                 new Date(r.created_at).toLocaleDateString('id-ID'),
                 r.parent_name,
@@ -690,6 +705,7 @@ if (exportBtn) {
                 r.homebase || '', // New Column
                 r.phone,
                 r.email,
+                r.nominal || 0,
                 r.payment_status || 'pending'
             ])
         ].map(row => row.map(v => `"${(v || '').toString().replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -719,10 +735,10 @@ searchInput.addEventListener('input', (e) => {
 // Image Preview Helper (Global)
 window.previewImage = (url) => {
     if (!imageModal || !modalImage) return;
-    
+
     modalImage.src = url;
     imageModal.classList.remove('hidden');
-    
+
     // Trigger animations
     setTimeout(() => {
         imageModalBackdrop.classList.remove('opacity-0');
@@ -732,10 +748,10 @@ window.previewImage = (url) => {
 
 function closeImageModal() {
     if (!imageModal) return;
-    
+
     imageModalBackdrop.classList.add('opacity-0');
     imageModalPanel.classList.add('opacity-0', 'scale-95');
-    
+
     setTimeout(() => {
         imageModal.classList.add('hidden');
         modalImage.src = ''; // Clear src
@@ -745,12 +761,12 @@ function closeImageModal() {
 async function downloadImage() {
     const url = modalImage.src;
     if (!url) return;
-    
+
     try {
         const response = await fetch(url);
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
-        
+
         const link = document.createElement('a');
         link.href = blobUrl;
         link.download = `bukti-pembayaran-${Date.now()}.jpg`;

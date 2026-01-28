@@ -64,7 +64,7 @@
         </header>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-5 mb-8">
             <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
                 <div class="flex items-center gap-4">
                     <div class="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -110,6 +110,18 @@
                         <p class="text-xs text-[#1c180d]/60 dark:text-white/60 font-bold uppercase tracking-wider">
                             Registration Attendance</p>
                         <p id="stat-attendance" class="text-2xl font-bold font-display">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
+                <div class="flex items-center gap-4">
+                    <div class="size-12 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
+                        <span class="material-symbols-outlined">attach_money</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-[#1c180d]/60 dark:text-white/60 font-bold uppercase tracking-wider">
+                            Total Infaq</p>
+                        <p id="stat-infaq" class="text-2xl font-bold font-display">-</p>
                     </div>
                 </div>
             </div>
@@ -164,6 +176,10 @@
                         class="filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-colors bg-gray-100 dark:bg-[#221d10] text-[#1c180d] dark:text-white hover:bg-gray-200">
                         ⏱ Pending
                     </button>
+                    <button data-filter="infaq"
+                        class="filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-colors bg-gray-100 dark:bg-[#221d10] text-[#1c180d] dark:text-white hover:bg-gray-200">
+                        $ Infaq
+                    </button>
                 </div>
             </div>
 
@@ -180,6 +196,7 @@
                             <!-- Attendance Removed -->
                             <th class="px-6 py-4">Contact</th>
                             <th class="px-6 py-4">Infaq</th>
+                            <th class="px-6 py-4">Nominal</th>
                             <th class="px-6 py-4">Proof</th>
                             <th class="px-6 py-4">Status</th>
                             <th class="px-6 py-4">Actions</th>
@@ -338,6 +355,14 @@
                     <label
                         class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Email</label>
                     <input type="email" id="edit-email" required
+                        class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
+                </div>
+
+                <div class="space-y-1">
+                    <label
+                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nominal
+                        Infaq</label>
+                    <input type="number" id="edit-nominal" placeholder="Rp 0"
                         class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary">
                 </div>
 
