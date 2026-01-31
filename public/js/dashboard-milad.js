@@ -636,6 +636,20 @@ function renderTable(data) {
                 </span>
             </td>
             <td class="px-6 py-4 align-top">
+                ${row.payment_method === 'cash' ? `
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
+                         <span class="material-symbols-outlined text-sm mr-1">handshake</span>
+                         Tunai
+                    </span>
+                    <span class="block text-[10px] text-[#1c180d]/40 mt-1">Via Wali Kelas</span>
+                ` : (row.infaq_status === 'yes' ? `
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+                         <span class="material-symbols-outlined text-sm mr-1">account_balance</span>
+                         Transfer
+                    </span>
+                ` : '<span class="text-xs text-[#1c180d]/40 italic">-</span>')}
+            </td>
+            <td class="px-6 py-4 align-top">
                 ${row.proof_url ? `
                     <button onclick="window.previewImage('${row.proof_url}')" class="relative group/img overflow-hidden rounded-lg w-12 h-12 bg-gray-100 border border-black/10 shrink-0">
                         <img src="${row.proof_url}" alt="Proof" class="w-full h-full object-cover">
@@ -643,7 +657,7 @@ function renderTable(data) {
                             <span class="material-symbols-outlined text-white text-lg">visibility</span>
                         </div>
                     </button>
-                ` : '<span class="text-xs text-[#1c180d]/40 italic">Empty</span>'}
+                ` : '<span class="text-xs text-[#1c180d]/40 italic">-</span>'}
             </td>
             <td class="px-6 py-4 align-top whitespace-nowrap">
                 ${row.payment_status === 'verified' ? `
@@ -801,7 +815,9 @@ window.viewTicket = async (id) => {
             email: data.email,
             // attendance: data.attendance, // Removed
             id: data.id,
-            date: new Date(data.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+            date: new Date(data.created_at).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+            infaq_status: data.infaq_status,
+            payment_method: data.payment_method
         };
 
         // Use proof_url as the image source for the ticket
@@ -955,7 +971,14 @@ async function generateTicket(data, proofImgUrl) {
 
     y += 50;
 
-    if (proofImgUrl) {
+    if (data.infaq_status === 'yes' && data.payment_method === 'cash') {
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('METODE: TUNAI (Wali Kelas)', x, y + 30);
+        ctx.font = 'italic 20px sans-serif';
+        ctx.fillStyle = '#888888';
+        ctx.fillText('Silahkan titipkan infaq kepada Wali Kelas.', x, y + 60);
+    } else if (proofImgUrl) {
         try {
             const img = new Image();
             img.crossOrigin = "Anonymous";
@@ -983,7 +1006,8 @@ async function generateTicket(data, proofImgUrl) {
     } else {
         ctx.fillStyle = '#888888';
         ctx.font = 'italic 20px sans-serif';
-        ctx.fillText('(Tidak ada bukti pembayaran)', x, y + 30);
+        const msg = data.infaq_status === 'yes' ? '(Tidak ada bukti pembayaran)' : '-';
+        ctx.fillText(msg, x, y + 30);
     }
 
     // Footer

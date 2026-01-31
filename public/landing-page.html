@@ -156,7 +156,7 @@
                     <div class="flex items-center gap-4">
                         <div class="size-14 rounded-full bg-cover bg-center border-2 border-primary"
                             data-alt="A portrait of the school principal smiling"
-                            style='background-image: url("foto (1).jpeg");'>
+                            style='background-image: url("assets/foto (1).jpeg");'>
                         </div>
                         <div>
                             <p class="text-[#1c180d] dark:text-white text-lg font-bold leading-tight">Ustadz Suhadi
@@ -425,9 +425,6 @@
                             </button>
                         </div>
 
-
-
-
                         <div class="space-y-3 pt-2">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Konfirmasi
@@ -468,56 +465,131 @@
                         </div>
 
                         <div id="infaq-container" class="space-y-4 hidden text-left mt-3">
-                            <!-- Payment Details Card -->
-                            <div
-                                class="bg-[#f8f7f5] dark:bg-[#221d10] p-4 rounded-xl border border-black/5 dark:border-white/5 space-y-4">
 
-                                <!-- Bank Transfer -->
-                                <div class="space-y-2">
-                                    <p
-                                        class="text-[10px] font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 text-center">
-                                        Transfer Bank</p>
-                                    <div
-                                        class="flex items-center gap-3 bg-white dark:bg-[#2c2618] p-3 rounded-xl shadow-sm border border-black/5 dark:border-white/5">
-                                        <div class="bg-primary/10 p-2.5 rounded-full shrink-0">
-                                            <span
-                                                class="material-symbols-outlined text-primary text-xl">account_balance</span>
+                            <!-- Payment Method Selection -->
+                            <div>
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1 mb-2 block">Metode
+                                    Pembayaran</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <!-- Option Transfer -->
+                                    <label class="cursor-pointer group relative">
+                                        <input type="radio" name="payment_method" value="transfer" class="peer sr-only"
+                                            checked>
+                                        <div
+                                            class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex items-center justify-center">
+                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Transfer
+                                                Bank</span>
                                         </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-xs font-bold text-[#1c180d] dark:text-white">Bank Jatim</p>
-                                            <div class="flex items-center gap-2">
-                                                <p
-                                                    class="text-sm font-mono font-bold text-[#1c180d] dark:text-white truncate">
-                                                    0047297168</p>
-                                                <button type="button"
-                                                    class="text-[10px] bg-primary/10 hover:bg-primary/20 text-primary font-bold px-2 py-0.5 rounded transition-colors"
-                                                    onclick="copyToClipboard('0047297168', this)">Salin</button>
-                                            </div>
-                                            <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">a.n
-                                                SD Anak Saleh</p>
+                                    </label>
+                                    <!-- Option Cash -->
+                                    <label class="cursor-pointer group relative">
+                                        <input type="radio" name="payment_method" value="cash" class="peer sr-only">
+                                        <div
+                                            class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex items-center justify-center">
+                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Tunai (Wali
+                                                Kelas)</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
 
-                                            <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">sertai
-                                                kode unik 21 di digit terakhir</p>
-                                            <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">contoh :
-                                                Rp 500.000 + 21 = Rp 500.021</p>
+                            <!-- Transfer Section -->
+                            <div id="payment-transfer-section" class="space-y-4">
+                                <!-- Payment Details Card -->
+                                <div
+                                    class="bg-[#f8f7f5] dark:bg-[#221d10] p-4 rounded-xl border border-black/5 dark:border-white/5 space-y-4">
+
+                                    <!-- Bank Transfer -->
+                                    <div class="space-y-2">
+                                        <p
+                                            class="text-[10px] font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 text-center">
+                                            Transfer Bank</p>
+                                        <div
+                                            class="flex items-center gap-3 bg-white dark:bg-[#2c2618] p-3 rounded-xl shadow-sm border border-black/5 dark:border-white/5">
+                                            <div class="bg-primary/10 p-2.5 rounded-full shrink-0">
+                                                <span
+                                                    class="material-symbols-outlined text-primary text-xl">account_balance</span>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-xs font-bold text-[#1c180d] dark:text-white">Bank Jatim
+                                                </p>
+                                                <div class="flex items-center gap-2">
+                                                    <p
+                                                        class="text-sm font-mono font-bold text-[#1c180d] dark:text-white truncate">
+                                                        0047297168</p>
+                                                    <button type="button"
+                                                        class="text-[10px] bg-primary/10 hover:bg-primary/20 text-primary font-bold px-2 py-0.5 rounded transition-colors"
+                                                        onclick="copyToClipboard('0047297168', this)">Salin</button>
+                                                </div>
+                                                <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">a.n
+                                                    SD Anak Saleh</p>
+
+                                                <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">
+                                                    sertai
+                                                    kode unik 21 di digit terakhir</p>
+                                                <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">
+                                                    contoh :
+                                                    Rp 500.000 + 21 = Rp 500.021</p>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
-                            </div>
-
-                            <!-- File Upload -->
-                            <div class="pt-2">
-                                <label
-                                    class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1 mb-1 block">Upload
-                                    Bukti Transfer</label>
-                                <div class="relative group">
-                                    <input type="file" name="payment_proof" accept="image/*,application/pdf"
-                                        class="w-full text-sm text-[#1c180d] dark:text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer bg-[#f8f7f5] dark:bg-[#221d10] rounded-xl border border-transparent group-hover:border-primary/20 transition-all">
-                                    <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-1.5 ml-1">Format:
-                                        JPG, PNG, PDF (Max. 2MB)</p>
+                                <!-- File Upload -->
+                                <div class="pt-2">
+                                    <label
+                                        class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1 mb-1 block">Upload
+                                        Bukti Transfer</label>
+                                    <div class="relative group">
+                                        <input type="file" name="payment_proof" accept="image/*,application/pdf"
+                                            class="w-full text-sm text-[#1c180d] dark:text-white file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer bg-[#f8f7f5] dark:bg-[#221d10] rounded-xl border border-transparent group-hover:border-primary/20 transition-all">
+                                        <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-1.5 ml-1">Format:
+                                            JPG, PNG, PDF (Max. 2MB)</p>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Cash Section -->
+                            <div id="payment-cash-section" class="hidden">
+                                <div
+                                    class="bg-[#f8f7f5] dark:bg-[#221d10] p-5 rounded-xl border border-black/5 dark:border-white/5 space-y-3">
+                                    <div class="text-center pb-2 border-b border-black/5 dark:border-white/5">
+                                        <div class="inline-flex p-3 bg-primary/10 rounded-full text-primary mb-2">
+                                            <span class="material-symbols-outlined text-2xl">handshake</span>
+                                        </div>
+                                        <p class="text-sm font-bold text-[#1c180d] dark:text-white">Titipan Tunai via
+                                            Wali Kelas</p>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <p
+                                            class="text-[10px] font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 mb-1">
+                                            Tata Cara Pembayaran:</p>
+                                        <ol
+                                            class="list-decimal list-outside ml-4 space-y-1.5 text-xs text-[#1c180d]/80 dark:text-white/80 leading-relaxed">
+                                            <li>Siapkan uang tunai sejumlah infaq yang diinginkan.</li>
+                                            <li>Masukkan uang ke dalam amplop tertutup.</li>
+                                            <li>Tuliskan <b>Nama Lengkap Siswa</b> dan <b>Kelas</b> pada bagian luar
+                                                amplop.</li>
+                                            <li>Serahkan amplop tersebut kepada <b>Wali Kelas</b> masing-masing di
+                                                sekolah.</li>
+                                        </ol>
+                                    </div>
+
+                                    <div
+                                        class="flex items-start gap-2 p-3 bg-primary/5 rounded-lg border border-primary/10 mt-2">
+                                        <span
+                                            class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5">info</span>
+                                        <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 leading-tight">
+                                            Mohon selesaikan pendaftaran ini di aplikasi setelah atau sebelum
+                                            menyerahkan titipan.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

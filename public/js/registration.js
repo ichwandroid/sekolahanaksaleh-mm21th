@@ -1099,6 +1099,26 @@ window.initRegistration = function () {
         });
     }
 
+    // Payment Method Logic (Transfer vs Cash)
+    const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+    const transferSection = document.getElementById('payment-transfer-section');
+    const cashSection = document.getElementById('payment-cash-section');
+
+    if (paymentMethodRadios.length > 0 && transferSection && cashSection) {
+        paymentMethodRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const method = e.target.value;
+                if (method === 'transfer') {
+                    transferSection.classList.remove('hidden');
+                    cashSection.classList.add('hidden');
+                } else if (method === 'cash') {
+                    transferSection.classList.add('hidden');
+                    cashSection.classList.remove('hidden');
+                }
+            });
+        });
+    }
+
     // Modal Logic
     function openModal(e) {
         if (e) e.preventDefault();
@@ -1242,6 +1262,7 @@ window.initRegistration = function () {
                     email: formData.get('email'),
                     attendees: attendeesList.join(', '), // Save attendees names
                     infaq_status: formData.get('infaq_status'),
+                    payment_method: formData.get('payment_method'), // Added payment_method
                     proof_url: proofUrl,
                     created_at: new Date().toISOString()
                 };
@@ -1280,7 +1301,9 @@ window.initRegistration = function () {
                             phone: data.phone,
                             email: data.email,
                             id: registrationId, // Pass ID for QR Code
-                            date: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+                            date: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+                            infaq_status: data.infaq_status,
+                            payment_method: formData.get('payment_method')
                         };
 
                         // Use local file for canvas to avoid CORS issues
@@ -1470,7 +1493,14 @@ async function generateTicket(data, proofImgUrl) {
 
     y += 50;
 
-    if (proofImgUrl) {
+    if (data.infaq_status === 'yes' && data.payment_method === 'cash') {
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('METODE: TUNAI (Wali Kelas)', x, y + 30);
+        ctx.font = 'italic 20px sans-serif';
+        ctx.fillStyle = '#888888';
+        ctx.fillText('Silahkan titipkan infaq kepada Wali Kelas.', x, y + 60);
+    } else if (proofImgUrl) {
         try {
             const img = new Image();
             img.crossOrigin = "Anonymous";
@@ -1499,7 +1529,8 @@ async function generateTicket(data, proofImgUrl) {
     } else {
         ctx.fillStyle = '#888888';
         ctx.font = 'italic 20px sans-serif';
-        ctx.fillText('(Tidak ada bukti pembayaran)', x, y + 30);
+        const msg = data.infaq_status === 'yes' ? '(Tidak ada bukti pembayaran)' : '-';
+        ctx.fillText(msg, x, y + 30);
     }
 
     // Footer
@@ -1535,10 +1566,14 @@ function validateForm(formData) {
     // Infaq validation
     const infaqStatus = formData.get('infaq_status');
     const paymentProof = formData.get('payment_proof');
+    const paymentMethod = formData.get('payment_method'); // 'transfer' or 'cash'
 
     if (infaqStatus === 'yes') {
-        if (!paymentProof || paymentProof.size === 0) {
-            throw new Error("Mohon upload bukti transfer infaq.");
+        // Only require proof if method is transfer
+        if (paymentMethod === 'transfer' || !paymentMethod) { // Default to check if undefined
+            if (!paymentProof || paymentProof.size === 0) {
+                throw new Error("Mohon upload bukti transfer infaq.");
+            }
         }
     }
 
