@@ -273,7 +273,7 @@ editForm.addEventListener('submit', async (e) => {
         // attendance: document.getElementById('edit-attendance').value, // Removed
         phone: document.getElementById('edit-phone').value,
         email: document.getElementById('edit-email').value,
-        nominal: document.getElementById('edit-nominal').value,
+        nominal: document.getElementById('edit-nominal').value ? parseFloat(document.getElementById('edit-nominal').value) : 0,
     };
 
     try {
