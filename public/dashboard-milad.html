@@ -60,11 +60,16 @@
                     <span class="material-symbols-outlined">refresh</span>
                     Refresh Data
                 </button>
+                <a href="dashboard-tamu.html"
+                    class="flex items-center gap-2 text-primary hover:text-primary/80 mb-2 font-bold text-sm">
+                    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                    Dashboard Tamu
+                </a>
             </div>
         </header>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-5 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
             <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
                 <div class="flex items-center gap-4">
                     <div class="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -77,7 +82,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
+            <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5"
+                hidden>
                 <div class="flex items-center gap-4">
                     <div class="size-12 rounded-xl bg-green-500/10 text-green-500 flex items-center justify-center">
                         <span class="material-symbols-outlined">check_circle</span>
@@ -89,7 +95,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5">
+            <div class="bg-white dark:bg-[#2c2618] p-6 rounded-2xl shadow-sm border border-black/5 dark:border-white/5"
+                hidden>
                 <div class="flex items-center gap-4">
                     <div class="size-12 rounded-xl bg-yellow-500/10 text-yellow-500 flex items-center justify-center">
                         <span class="material-symbols-outlined">pending</span>
@@ -183,10 +190,10 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
+            <div class="overflow-x-auto max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <table class="w-full text-left text-sm relative">
                     <thead
-                        class="bg-[#f8f7f5] dark:bg-[#221d10] text-[#1c180d]/60 dark:text-white/60 uppercase text-xs font-bold tracking-wider">
+                        class="sticky top-0 z-10 bg-[#f8f7f5] dark:bg-[#221d10] text-[#1c180d]/60 dark:text-white/60 uppercase text-xs font-bold tracking-wider shadow-sm">
                         <tr>
                             <th class="px-6 py-4">Date</th>
                             <th class="px-6 py-4">Parents</th>

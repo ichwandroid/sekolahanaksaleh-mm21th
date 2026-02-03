@@ -1358,7 +1358,7 @@ async function generateTicket(data, proofImgUrl) {
         await new Promise((resolve, reject) => {
             logo.onload = resolve;
             logo.onerror = reject;
-            logo.src = './SD Anak Saleh.png';
+            logo.src = './assets/21th Ansal.png';
         });
         // Draw logo on the left side
         ctx.drawImage(logo, 40, 40, 100, 100);

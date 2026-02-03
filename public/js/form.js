@@ -105,66 +105,7 @@ window.initForm = function () {
     if (alertBackdrop) alertBackdrop.onclick = closeAlert;
 
 
-    // Infaq Logic
-    const infaqRadios = document.querySelectorAll('input[name="infaq_status"]');
-    const infaqContainer = document.getElementById('infaq-container');
-
-    if (infaqRadios.length > 0 && infaqContainer) {
-        const fileInput = infaqContainer.querySelector('input[type="file"]');
-
-        infaqRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const isYes = e.target.value === 'yes';
-
-                if (isYes) {
-                    infaqContainer.classList.remove('hidden');
-                    if (window.gsap) {
-                        gsap.fromTo(infaqContainer,
-                            { height: 0, opacity: 0, marginTop: 0 },
-                            { height: 'auto', opacity: 1, marginTop: '12px', duration: 0.3, ease: 'power2.out' }
-                        );
-                    }
-                } else {
-                    if (window.gsap) {
-                        gsap.to(infaqContainer, {
-                            height: 0,
-                            opacity: 0,
-                            marginTop: 0,
-                            duration: 0.3,
-                            ease: 'power2.in',
-                            onComplete: () => {
-                                infaqContainer.classList.add('hidden');
-                                if (fileInput) fileInput.value = '';
-                            }
-                        });
-                    } else {
-                        infaqContainer.classList.add('hidden');
-                        if (fileInput) fileInput.value = '';
-                    }
-                }
-            });
-        });
-    }
-
-    // Payment Method Logic
-    const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
-    const transferSection = document.getElementById('payment-transfer-section');
-    const cashSection = document.getElementById('payment-cash-section');
-
-    if (paymentMethodRadios.length > 0 && transferSection && cashSection) {
-        paymentMethodRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const method = e.target.value;
-                if (method === 'transfer') {
-                    transferSection.classList.remove('hidden');
-                    cashSection.classList.add('hidden');
-                } else if (method === 'cash') {
-                    transferSection.classList.add('hidden');
-                    cashSection.classList.remove('hidden');
-                }
-            });
-        });
-    }
+    // Infaq and Payment Logic Removed
 
     // Modal Logic
     function openModal(e) {
@@ -221,24 +162,8 @@ window.initForm = function () {
                 return;
             }
 
-            const file = formData.get('payment_proof');
-            let proofUrl = '';
-
             try {
-                // 1. Upload File (Firebase Storage)
-                if (file && file.size > 0) {
-                    const fileExt = file.name.split('.').pop();
-                    const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-                    const filePath = `registration-proofs/${fileName}`;
-
-                    const storageRef = window.storage.ref();
-                    const fileRef = storageRef.child(filePath);
-
-                    await fileRef.put(file);
-                    proofUrl = await fileRef.getDownloadURL();
-                }
-
-                // 2. Insert Data (Firebase Firestore)
+                // 1. Insert Data (Firebase Firestore)
                 // Mapping fields for KS & Guru
                 const schoolName = formData.get('school_name');
                 const headmasterName = formData.get('headmaster_name');
@@ -248,13 +173,13 @@ window.initForm = function () {
                 const data = {
                     parent_name: headmasterName, // Storing Headmaster Name as Parent Name (Main Contact)
                     child_name: schoolName, // Storing School Name as Child Name
-                    homebase: 'UNDANGAN KS & GURU', // Special Marker
+                    child_name: schoolName, // Storing School Name as Child Name
                     phone: formData.get('phone'),
                     email: formData.get('email'),
                     attendees: attendeesString, // Storing Teacher Name in Attendees
-                    infaq_status: formData.get('infaq_status'),
-                    payment_method: formData.get('payment_method'),
-                    proof_url: proofUrl,
+                    infaq_status: 'no',
+                    payment_method: '-',
+                    proof_url: '',
                     created_at: new Date().toISOString()
                 };
 
@@ -280,12 +205,11 @@ window.initForm = function () {
                             phone: data.phone,
                             email: data.email,
                             date: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
-                            infaq_status: data.infaq_status,
-                            payment_method: formData.get('payment_method')
+                            infaq_status: 'no',
+                            payment_method: '-'
                         };
 
-                        const proofImgUrl = file ? URL.createObjectURL(file) : null;
-                        const ticketUrl = await generateTicket(ticketData, proofImgUrl);
+                        const ticketUrl = await generateTicket(ticketData, null);
 
                         const link = document.createElement('a');
                         link.href = ticketUrl;
@@ -294,7 +218,6 @@ window.initForm = function () {
 
                     } catch (err) {
                         console.error('Error generating ticket:', err);
-                        if (proofUrl) window.open(proofUrl, '_blank');
                     }
 
                     setTimeout(() => {
@@ -346,7 +269,7 @@ async function generateTicket(data, proofImgUrl) {
         await new Promise((resolve, reject) => {
             logo.onload = resolve;
             logo.onerror = reject;
-            logo.src = './SD Anak Saleh.png';
+            logo.src = './assets/21th Ansal.png';
         });
         ctx.drawImage(logo, 40, 40, 100, 100);
     } catch (e) {
@@ -424,47 +347,7 @@ async function generateTicket(data, proofImgUrl) {
     drawField('No HP', data.phone);
     drawField('Email', data.email);
 
-    // Proof Section (Infaq)
-    y += 40;
-    if (data.infaq_status === 'yes') {
-        ctx.fillStyle = '#1c180d';
-        ctx.font = 'bold 30px sans-serif';
-        ctx.fillText('BUKTI INFAQ', x, y);
-        y += 20;
-        ctx.beginPath();
-        ctx.moveTo(x, y + 10);
-        ctx.lineTo(canvas.width - x, y + 10);
-        ctx.stroke();
-        y += 50;
-
-        if (data.payment_method === 'cash') {
-            ctx.fillStyle = '#000000';
-            ctx.font = 'bold 24px sans-serif';
-            ctx.fillText('METODE: TUNAI (Di Lokasi)', x, y + 30);
-        } else if (proofImgUrl) {
-            try {
-                const img = new Image();
-                img.crossOrigin = "Anonymous";
-                await new Promise((resolve, reject) => {
-                    img.onload = resolve;
-                    img.onerror = resolve;
-                    img.src = proofImgUrl;
-                });
-
-                if (img.width > 0) {
-                    const maxWidth = canvas.width - 100;
-                    const maxHeight = 300;
-                    const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-                    const w = img.width * ratio;
-                    const h = img.height * ratio;
-                    const imgX = (canvas.width - w) / 2;
-                    ctx.drawImage(img, imgX, y, w, h);
-                }
-            } catch (e) {
-                ctx.fillText('(Gambar tidak dapat dimuat)', x, y + 30);
-            }
-        }
-    }
+    // Proof Section Removed
 
     // Footer
     const footerY = canvas.height - 60;
@@ -496,17 +379,7 @@ function validateForm(formData) {
         throw new Error("Nomor WhatsApp tidak valid (Gunakan format 08xx/62xx).");
     }
 
-    const infaqStatus = formData.get('infaq_status');
-    const paymentProof = formData.get('payment_proof');
-    const paymentMethod = formData.get('payment_method');
-
-    if (infaqStatus === 'yes') {
-        if (paymentMethod === 'transfer' || !paymentMethod) {
-            if (!paymentProof || paymentProof.size === 0) {
-                throw new Error("Mohon upload bukti transfer infaq.");
-            }
-        }
-    }
+    // Infaq validation removed
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
