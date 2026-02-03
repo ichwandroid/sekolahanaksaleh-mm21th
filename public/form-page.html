@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Milad Meriah 21th - Smart Edu-Parenting</title>
+    <title>Milad Meriah 21th - Konfirmasi KS & Guru</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;700&amp;display=swap"
@@ -17,7 +17,12 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
@@ -82,7 +87,7 @@
             </div>
             <h2
                 class="text-[#1c180d] dark:text-white text-base font-bold leading-tight tracking-tight flex-1 text-center">
-                Milad Meriah 21th</h2>
+                Konfirmasi KS & Guru</h2>
             <div class="flex w-10 items-center justify-end">
                 <button id="share-button"
                     class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1c180d] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
@@ -96,148 +101,24 @@
                 <div class="relative bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[340px] shadow-lg group"
                     data-alt="Happy families celebrating together at an outdoor event"
                     style='background-image: linear-gradient(0deg, rgba(241, 143, 245, 0.7) 0%, rgba(0, 0, 0, 0) 50%), url("assets/image 2.png");'>
-                    <!-- <div
-                        class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                        14 Februari 2026
-                    </div>
-                    <div class="p-6">
-                        <p class="text-black font-bold text-sm tracking-[0.2em] uppercase mb-1">Smart Edu-Parenting</p>
-                        <p
-                            class="text-black bg-secondary/50 px-2 py-1 rounded tracking-tight text-3xl font-extrabold leading-tight">
-                            "Berseri sebagai Istri, Berilmu sebagai Ibu dan Menjadi Ayah Penyejuk Jiwa"</p>
-                    </div> -->
                 </div>
             </div>
             <!-- HeadlineText -->
             <div class="px-4 text-center">
                 <h2 class="text-[#1c180d] dark:text-white tracking-tight text-2xl font-bold leading-tight pb-2 pt-4">
-                    Merayakan 21 Tahun</h2>
+                    Undangan Khusus</h2>
                 <p class="text-sm text-[#1c180d]/60 dark:text-white/60 max-w-xs mx-auto">
-                    Bergabunglah bersama SD Anak Saleh untuk memeriahkan Milad Sekolah yang didedikasikan untuk
-                    keunggulan dalam menerapkan pola asuh yang bijak, adaptif, dan penuh kesadaran demi mengoptimalkan
-                    tumbuh kembang serta karakter buah hati tersayang.</p>
-            </div>
-            <!-- Timer -->
-            <div class="flex gap-3 py-6 px-4">
-                <div class="flex grow basis-0 flex-col items-center gap-2">
-                    <div
-                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-primary text-white shadow-md">
-                        <p id="timer-days" class="text-2xl font-black leading-tight">00</p>
-                    </div>
-                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Days</p>
-                </div>
-                <div class="flex grow basis-0 flex-col items-center gap-2">
-                    <div
-                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-white dark:bg-[#322d1f] shadow-sm border border-black/5">
-                        <p id="timer-hours" class="text-2xl font-black leading-tight">00</p>
-                    </div>
-                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Hours
-                    </p>
-                </div>
-                <div class="flex grow basis-0 flex-col items-center gap-2">
-                    <div
-                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-white dark:bg-[#322d1f] shadow-sm border border-black/5">
-                        <p id="timer-minutes" class="text-2xl font-black leading-tight">00</p>
-                    </div>
-                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Mins</p>
-                </div>
-                <div class="flex grow basis-0 flex-col items-center gap-2">
-                    <div
-                        class="flex h-16 w-full items-center justify-center rounded-2xl bg-white dark:bg-[#322d1f] shadow-sm border border-black/5">
-                        <p id="timer-seconds" class="text-2xl font-black leading-tight">00</p>
-                    </div>
-                    <p class="text-[#1c180d] dark:text-white/80 text-[10px] font-bold uppercase tracking-wider">Secs</p>
-                </div>
-            </div>
-            <!-- Principal Message Card -->
-            <div class="px-4 mb-4">
-                <div
-                    class="flex flex-col gap-4 rounded-2xl bg-white dark:bg-[#2c2618] p-5 shadow-sm border border-black/5 dark:border-white/5">
-                    <div class="flex items-center gap-4">
-                        <div class="size-14 rounded-full bg-cover bg-center border-2 border-primary"
-                            data-alt="A portrait of the school principal smiling"
-                            style='background-image: url("assets/foto (1).jpeg");'>
-                        </div>
-                        <div>
-                            <p class="text-[#1c180d] dark:text-white text-lg font-bold leading-tight">Ustadz Suhadi
-                                Fadjaray</p>
-                            <p class="text-primary text-xs font-semibold uppercase tracking-wide">Parenting & Konsultan
-                                Pendidikan</p>
-                        </div>
-                    </div>
-                    <p class="text-[#1c180d]/80 dark:text-white/80 text-sm italic leading-relaxed">
-                        Beliau adalah seorang Penulis Buku "Harmoni Cinta Madrasah Keluarga" dan juga seorang
-                        Motivator Pendidikan.
-                    </p>
-                </div>
+                    Konfirmasi kehadiran Kepala Sekolah dan Guru Pendamping dalam rangka Milad ke-21 SD Anak Saleh.</p>
             </div>
 
             <!-- Rundown Acara -->
-            <div class="px-4 space-y-4 mb-8">
+            <div class="px-4 space-y-4 mb-8 mt-6">
                 <h3 class="text-lg font-bold px-1 flex items-center gap-2">
                     <span class="size-2 bg-primary rounded-full"></span>
-                    Rangkaian Kegiatan Milad <br>SD Anak Saleh
+                    Informasi Acara
                 </h3>
 
                 <div class="relative pl-4 border-l-2 border-dashed border-primary/20 space-y-6 my-2 ml-2">
-
-                    <!-- Panggung Ekspresi -->
-                    <div class="relative group">
-                        <div
-                            class="absolute -left-[21px] top-3 size-4 rounded-full bg-primary border-4 border-[#f8f7f5] dark:border-[#221d10] shadow-sm">
-                        </div>
-                        <div
-                            class="ml-4 bg-white dark:bg-[#2c2618] p-4 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 hover:border-primary/30 transition-colors">
-
-                            <span
-                                class="inline-block px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
-                                15 - 18 Desember 2025
-                            </span>
-                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Panggung
-                                Ekspresi</h4>
-                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Penampilan kreatif siswa-siswi.
-                            </p>
-                            <div
-                                class="mt-2 flex items-center gap-1 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-1 rounded-md w-fit">
-                                <span class="material-symbols-outlined text-sm">check_circle</span>
-                                <span class="text-[10px] font-bold uppercase">Selesai</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dober -->
-                    <div class="relative group">
-                        <div
-                            class="absolute -left-[21px] top-3 size-4 rounded-full bg-primary border-4 border-[#f8f7f5] dark:border-[#221d10] shadow-sm">
-                        </div>
-                        <div
-                            class="ml-4 bg-white dark:bg-[#2c2618] p-4 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 hover:border-primary/30 transition-colors">
-                            <span
-                                class="inline-block px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
-                                13 Februari 2026
-                            </span>
-                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Dober</h4>
-                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Doa Bersama untuk keberkahan.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Santunan -->
-                    <div class="relative group">
-                        <div
-                            class="absolute -left-[21px] top-3 size-4 rounded-full bg-primary border-4 border-[#f8f7f5] dark:border-[#221d10] shadow-sm">
-                        </div>
-                        <div
-                            class="ml-4 bg-white dark:bg-[#2c2618] p-4 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 hover:border-primary/30 transition-colors">
-                            <span
-                                class="inline-block px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
-                                13 - 14 Februari 2026
-                            </span>
-                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Santunan</h4>
-                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Berbagi kebahagiaan bersama.
-                            </p>
-                        </div>
-                    </div>
 
                     <!-- Smart Edu-Parenting -->
                     <div class="relative group">
@@ -250,27 +131,10 @@
                                 class="inline-block px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
                                 14 Februari 2026
                             </span>
-                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Smart
-                                Edu-Parenting</h4>
-                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Talkshow inspiratif parenting.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Bazar -->
-                    <div class="relative group">
-                        <div
-                            class="absolute -left-[21px] top-3 size-4 rounded-full bg-primary border-4 border-[#f8f7f5] dark:border-[#221d10] shadow-sm">
-                        </div>
-                        <div
-                            class="ml-4 bg-white dark:bg-[#2c2618] p-4 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 hover:border-primary/30 transition-colors">
-                            <span
-                                class="inline-block px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
-                                14 Februari 2026
-                            </span>
-                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Bazar Meriah
-                            </h4>
-                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Kuliner & produk kreatif.</p>
+                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Puncak Milad 21
+                                Tahun</h4>
+                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Smart Edu-Parenting & Ramah
+                                Tamah.</p>
                         </div>
                     </div>
 
@@ -316,7 +180,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="js/gsap-animations.js"></script>
-    <script src="js/timer.js"></script>
+    <!-- Removed timer.js as it might not be needed or can be reused. Keeping it commented out if needed -->
+    <!-- <script src="js/timer.js"></script> -->
 
     <!-- Custom Alert Modal -->
     <div id="custom-alert-modal" class="fixed inset-0 z-[200] hidden">
@@ -358,9 +223,8 @@
 
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h3 class="text-xl font-bold text-[#1c180d] dark:text-white">Daftar</h3>
-                        <p class="text-xs text-[#1c180d]/60 dark:text-white/60">Isi data diri Anda untuk mendapatkan
-                            tempat.</p>
+                        <h3 class="text-xl font-bold text-[#1c180d] dark:text-white">Daftar Tamu Undangan</h3>
+                        <p class="text-xs text-[#1c180d]/60 dark:text-white/60">Isi data untuk konfirmasi kehadiran.</p>
                     </div>
                     <button id="btn-close-modal"
                         class="size-8 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-[#1c180d] dark:text-white transition-colors">
@@ -370,27 +234,33 @@
 
                 <form id="registration-form" class="space-y-4">
                     <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+
                         <div class="space-y-1">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
-                                Lengkap</label>
-                            <input type="text" name="parent_name" required placeholder="Nama Lengkap Orang Tua"
+                                Sekolah / Instansi</label>
+                            <input type="text" name="school_name" required placeholder="Nama Sekolah"
                                 class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
                         </div>
 
-                        <div class="space-y-2">
+                        <div class="space-y-1">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
-                                Anak</label>
-                            <div id="children-container" class="space-y-3">
-                                <!-- Dynamic Child Rows will be inserted here -->
-                            </div>
-                            <button type="button" id="btn-add-child"
-                                class="w-full py-3 mt-2 bg-primary/10 hover:bg-primary/20 border-2 border-primary/20 hover:border-primary/40 text-primary font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
-                                <span class="material-symbols-outlined text-lg">add_circle</span>
-                                Tambah Anak
-                            </button>
+                                Kepala Sekolah</label>
+                            <input type="text" name="headmaster_name" required placeholder="Nama Lengkap KS"
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
                         </div>
+
+                        <div class="space-y-1">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
+                                Guru Pendamping</label>
+                            <input type="text" name="teacher_name" required placeholder="Nama Lengkap Guru"
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                            <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 ml-1 italic">Hanya 1 Guru
+                                Pendamping</p>
+                        </div>
+
 
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-1">
@@ -408,27 +278,10 @@
                             </div>
                         </div>
 
-
                         <div class="space-y-3 pt-2">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Konfirmasi
-                                Kehadiran <i>(Nama Lengkap)</i></label>
-
-                            <div id="attendees-container" class="space-y-3">
-                                <!-- Attendee rows will be inserted here -->
-                            </div>
-
-                            <button type="button" id="btn-add-attendee"
-                                class="w-full py-3 mt-2 bg-primary/10 hover:bg-primary/20 border-2 border-primary/20 hover:border-primary/40 text-primary font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95">
-                                <span class="material-symbols-outlined text-lg">person_add</span>
-                                Tambah Orang Kedua
-                            </button>
-                        </div>
-
-                        <div class="space-y-3 pt-2">
-                            <label
-                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Konfirmasi
-                                Infaq</label>
+                                Infaq (Opsional)</label>
                             <div class="grid grid-cols-2 gap-3">
                                 <!-- Option: Tidak -->
                                 <label class="cursor-pointer group relative">
@@ -487,8 +340,8 @@
                                         <input type="radio" name="payment_method" value="cash" class="peer sr-only">
                                         <div
                                             class="p-3 rounded-xl bg-[#f8f7f5] dark:bg-[#221d10] border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/20 transition-all text-center h-full flex items-center justify-center">
-                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Tunai (Wali
-                                                Kelas)</span>
+                                            <span class="text-xs font-bold text-[#1c180d] dark:text-white">Tunai (Di
+                                                Lokasi)</span>
                                         </div>
                                     </label>
                                 </div>
@@ -524,13 +377,6 @@
                                                 </div>
                                                 <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">a.n
                                                     SD Anak Saleh</p>
-
-                                                <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">
-                                                    sertai
-                                                    kode unik 21 di digit terakhir</p>
-                                                <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 truncate">
-                                                    contoh :
-                                                    Rp 500.000 + 21 = Rp 500.021</p>
                                             </div>
                                         </div>
                                     </div>
@@ -559,32 +405,13 @@
                                         <div class="inline-flex p-3 bg-primary/10 rounded-full text-primary mb-2">
                                             <span class="material-symbols-outlined text-2xl">handshake</span>
                                         </div>
-                                        <p class="text-sm font-bold text-[#1c180d] dark:text-white">Titipan Tunai via
-                                            Wali Kelas</p>
+                                        <p class="text-sm font-bold text-[#1c180d] dark:text-white">Titipan Tunai</p>
                                     </div>
 
                                     <div class="space-y-2">
                                         <p
-                                            class="text-[10px] font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 mb-1">
-                                            Tata Cara Pembayaran:</p>
-                                        <ol
-                                            class="list-decimal list-outside ml-4 space-y-1.5 text-xs text-[#1c180d]/80 dark:text-white/80 leading-relaxed">
-                                            <li>Siapkan uang tunai sejumlah infaq yang diinginkan.</li>
-                                            <li>Masukkan uang ke dalam amplop tertutup.</li>
-                                            <li>Tuliskan <b>Nama Lengkap Siswa</b> dan <b>Kelas</b> pada bagian luar
-                                                amplop.</li>
-                                            <li>Serahkan amplop tersebut kepada <b>Wali Kelas</b> masing-masing di
-                                                sekolah.</li>
-                                        </ol>
-                                    </div>
-
-                                    <div
-                                        class="flex items-start gap-2 p-3 bg-primary/5 rounded-lg border border-primary/10 mt-2">
-                                        <span
-                                            class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5">info</span>
-                                        <p class="text-[10px] text-[#1c180d]/60 dark:text-white/60 leading-tight">
-                                            Mohon selesaikan pendaftaran ini di aplikasi setelah atau sebelum
-                                            menyerahkan titipan.
+                                            class="text-xs text-[#1c180d]/80 dark:text-white/80 leading-relaxed text-center">
+                                            Silahkan serahkan infaq tunai saat registrasi ulang di lokasi acara.
                                         </p>
                                     </div>
                                 </div>
@@ -600,23 +427,21 @@
                     </button>
                 </form>
             </div>
-
-
-
         </div>
     </div>
     </div>
 
-    <script src="js/supabase-config.js"></script>
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
     <script src="js/form.js"></script>
     <script src="js/three-bg.js"></script>
     <script>
         document.getElementById('share-button').addEventListener('click', () => {
             if (navigator.share) {
                 navigator.share({
-                    title: 'Milad Meriah 21th',
-                    text: 'Bergabunglah bersama kami di SD Anak Saleh untuk merayakan 21 Tahun Milad Meriah 21th',
-                    url: 'https://sekolahanaksaleh-mm21th.web.app'
+                    title: 'Milad Meriah 21th - Undangan KS & Guru',
+                    text: 'Undangan Khusus untuk Kepala Sekolah & Guru Pendamping dalam rangka Milad 21 Tahun SD Anak Saleh',
+                    url: window.location.href
                 })
             } else {
                 if (window.showCustomAlert) {
