@@ -981,28 +981,14 @@ window.initRegistration = function () {
     }
 
     function updateAttendeeButton() {
-        if (attendeesContainer && btnAddAttendee && childrenContainer) {
+        if (attendeesContainer && btnAddAttendee) {
             const attendeeCount = attendeesContainer.children.length;
-            const childrenCount = childrenContainer.children.length;
 
-            // Rule: If 1 child, only 1 attendee allowed. If > 1 child, max 2 attendees.
-            if (childrenCount > 1) {
-                if (attendeeCount >= 2) {
-                    btnAddAttendee.style.display = 'none';
-                } else {
-                    btnAddAttendee.style.display = 'flex';
-                }
-            } else {
-                // If only 1 child, no second attendee allowed
+            // Rule: Max 2 attendees allowed regardless of children count
+            if (attendeeCount >= 2) {
                 btnAddAttendee.style.display = 'none';
-
-                // If there's already a second attendee, remove it
-                if (attendeeCount > 1) {
-                    const secondRow = attendeesContainer.children[1];
-                    if (secondRow) {
-                        secondRow.remove();
-                    }
-                }
+            } else {
+                btnAddAttendee.style.display = 'flex';
             }
         }
     }
