@@ -1,6 +1,8 @@
 // Dashboard Tamu Script
 // Displays data from 'registrations' collection
 
+let allData = []; // Store fetched data
+
 document.addEventListener('DOMContentLoaded', () => {
     initDashboard();
 });
@@ -21,8 +23,13 @@ function initDashboard() {
         return;
     }
 
-    const tableBody = document.getElementById('guest-table-body');
-    const totalCountEl = document.getElementById('total-count');
+    // Setup Filter Listeners
+    ['filter-school', 'filter-person', 'filter-attendee', 'filter-contact'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => renderTable());
+        }
+    });
 
     console.log("Listening to registrations...");
 
@@ -31,90 +38,28 @@ function initDashboard() {
         .orderBy('created_at', 'desc')
         .onSnapshot((snapshot) => {
             if (snapshot.empty) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="p-8 text-center text-[#1c180d]/40 dark:text-white/40">
-                            <div class="flex flex-col items-center gap-2">
-                                <span class="material-symbols-outlined text-4xl opacity-20">inbox</span>
-                                <span>Belum ada data pendaftar.</span>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                totalCountEl.innerText = '0';
+                allData = [];
+                renderTable();
                 return;
             }
 
-            let totalGuests = 0;
+            allData = [];
             const totalDocs = snapshot.size;
-            let html = '';
 
             snapshot.docs.forEach((doc, index) => {
                 const data = doc.data();
-                const rowNumber = totalDocs - index; // 5, 4, 3, 2, 1 for newest first
-
-                // Calculate Guests for this registration
-                let guestsInRow = 0;
-                if (data.parent_name) guestsInRow++;
-                if (data.attendees && data.attendees.trim() !== '-' && data.attendees.trim() !== '') guestsInRow++;
-
-                totalGuests += guestsInRow;
-
-                // Format Date
-                let dateStr = '-';
-                if (data.created_at) {
-                    try {
-                        const date = new Date(data.created_at);
-                        dateStr = date.toLocaleDateString('id-ID', {
-                            day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-                        });
-                    } catch (e) {
-                        console.warn('Date parsing error', e);
-                        dateStr = data.created_at;
-                    }
-                }
-
-                html += `
-                    <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
-                        <td class="p-4 text-sm text-[#1c180d]/40 dark:text-white/40 font-mono group-hover:text-primary transition-colors">
-                            #${rowNumber}
-                        </td>
-                        <td class="p-4 text-sm font-bold text-[#1c180d] dark:text-white uppercase">
-                            ${escapeHtml(data.child_name || '-')}
-                        </td>
-                        <td class="p-4 text-sm text-[#1c180d] dark:text-white capitalize">
-                            ${escapeHtml(data.parent_name || '-')}
-                        </td>
-                        <td class="p-4 text-sm text-[#1c180d] dark:text-white capitalize">
-                            ${escapeHtml(data.attendees || '-')}
-                        </td>
-                        <td class="p-4 text-sm">
-                            <div class="flex flex-col gap-1">
-                                <a href="https://wa.me/${formatPhone(data.phone)}" target="_blank" class="text-[#1c180d] dark:text-white hover:text-green-500 flex items-center gap-1 w-fit">
-                                    <span class="material-symbols-outlined text-[10px] bg-green-100 text-green-600 rounded-full p-0.5">call</span>
-                                    ${escapeHtml(data.phone || '-')}
-                                </a>
-                            </div>
-                        </td>
-                        <td class="p-4 text-sm text-[#1c180d]/60 dark:text-white/60 text-xs whitespace-nowrap">
-                            ${dateStr}
-                        </td>
-                        <td class="p-4 text-center">
-                            <button onclick="deleteGuest('${doc.id}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-white/10 p-2 rounded-full transition-colors" title="Hapus Data">
-                                <span class="material-symbols-outlined text-lg">delete</span>
-                            </button>
-                        </td>
-                    </tr>
-                `;
+                allData.push({
+                    id: doc.id,
+                    data: data,
+                    rowNumber: totalDocs - index
+                });
             });
 
-            totalCountEl.innerText = totalGuests;
-            tableBody.innerHTML = html;
+            renderTable();
 
         }, (error) => {
             console.error("Error fetching documents: ", error);
-
-            // Check for index error (common with compound queries)
+            const tableBody = document.getElementById('guest-table-body');
             let msg = 'Gagal memuat data.';
             if (error.message.includes('requires an index')) {
                 msg = 'Firestore Index Required. Check console for link to create index.';
@@ -122,7 +67,7 @@ function initDashboard() {
 
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="p-8 text-center text-red-500 bg-red-50 dark:bg-red-900/10 rounded-xl m-4">
+                    <td colspan="7" class="p-8 text-center text-red-500 bg-red-50 dark:bg-red-900/10 rounded-xl m-4">
                         <div class="flex flex-col items-center gap-2">
                              <span class="material-symbols-outlined">warning</span>
                              <span class="font-bold">${msg}</span>
@@ -132,6 +77,149 @@ function initDashboard() {
                 </tr>
             `;
         });
+}
+
+function renderTable() {
+    const tableBody = document.getElementById('guest-table-body');
+    const totalCountEl = document.getElementById('total-count');
+
+    // Get Filter Values
+    const fSchool = document.getElementById('filter-school').value.toLowerCase();
+    const fPerson = document.getElementById('filter-person').value.toLowerCase();
+    const fAttendee = document.getElementById('filter-attendee').value.toLowerCase();
+    const fContact = document.getElementById('filter-contact').value.toLowerCase();
+
+    let html = '';
+    let filteredCountGuests = 0;
+
+    const filteredData = allData.filter(item => {
+        const data = item.data;
+        // Determine values same as display logic
+        const isKBTK = data.type === 'KB_TK_ANAK_SALEH';
+        let displaySchool = isKBTK ? (data.school_name || 'KB TK Anak Saleh') : (data.child_name || '-');
+        let displayPerson = isKBTK ? (data.child_name || data.participant_name || '-') : (data.parent_name || '-');
+        let displayAttendee = isKBTK ? '-' : (data.attendees || '-');
+        let displayPhone = data.phone || '';
+
+        // Check inclusion
+        const matchSchool = displaySchool.toLowerCase().includes(fSchool);
+        const matchPerson = displayPerson.toLowerCase().includes(fPerson);
+        const matchAttendee = displayAttendee.toLowerCase().includes(fAttendee);
+        const matchContact = displayPhone.toLowerCase().includes(fContact);
+
+        return matchSchool && matchPerson && matchAttendee && matchContact;
+    });
+
+    if (filteredData.length === 0) {
+        if (allData.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="p-8 text-center text-[#1c180d]/40 dark:text-white/40">
+                        <div class="flex flex-col items-center gap-2">
+                            <span class="material-symbols-outlined text-4xl opacity-20">inbox</span>
+                            <span>Belum ada data pendaftar.</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        } else {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="p-8 text-center text-[#1c180d]/40 dark:text-white/40">
+                        <div class="flex flex-col items-center gap-2">
+                            <span class="material-symbols-outlined text-4xl opacity-20">search_off</span>
+                            <span>Tidak ditemukan data yang cocok.</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+        totalCountEl.innerText = '0';
+        return;
+    }
+
+    filteredData.forEach(item => {
+        const data = item.data;
+        const rowNumber = item.rowNumber;
+        const id = item.id;
+
+        // Determine Data Type & Fields
+        const isKBTK = data.type === 'KB_TK_ANAK_SALEH';
+
+        let displaySchool = '-';
+        let displayPerson = '-';
+        let displayAttendee = '-';
+
+        if (isKBTK) {
+            displaySchool = data.school_name || 'KB TK Anak Saleh';
+            displayPerson = data.child_name || data.participant_name || '-';
+            displayAttendee = '-';
+        } else {
+            displaySchool = data.child_name || '-';
+            displayPerson = data.parent_name || '-';
+            displayAttendee = data.attendees || '-';
+        }
+
+        // Calculate Guests
+        let guestsInRow = 0;
+        if (isKBTK) {
+            guestsInRow = 1;
+        } else {
+            if (data.parent_name && data.parent_name !== '-') guestsInRow++;
+            if (data.attendees && data.attendees.trim() !== '-' && data.attendees.trim() !== '') guestsInRow++;
+        }
+        filteredCountGuests += guestsInRow;
+
+        // Format Date
+        let dateStr = '-';
+        if (data.created_at) {
+            try {
+                const date = new Date(data.created_at);
+                dateStr = date.toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                });
+            } catch (e) {
+                console.warn('Date parsing error', e);
+                dateStr = data.created_at;
+            }
+        }
+
+        html += `
+            <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+                <td class="p-4 text-sm text-[#1c180d]/40 dark:text-white/40 font-mono group-hover:text-primary transition-colors">
+                    #${rowNumber}
+                </td>
+                <td class="p-4 text-sm font-bold text-[#1c180d] dark:text-white uppercase">
+                    ${escapeHtml(displaySchool)}
+                </td>
+                <td class="p-4 text-sm text-[#1c180d] dark:text-white capitalize">
+                    ${escapeHtml(displayPerson)}
+                </td>
+                <td class="p-4 text-sm text-[#1c180d] dark:text-white capitalize">
+                    ${escapeHtml(displayAttendee)}
+                </td>
+                <td class="p-4 text-sm">
+                    <div class="flex flex-col gap-1">
+                        <a href="https://wa.me/${formatPhone(data.phone)}" target="_blank" class="text-[#1c180d] dark:text-white hover:text-green-500 flex items-center gap-1 w-fit">
+                            <span class="material-symbols-outlined text-[10px] bg-green-100 text-green-600 rounded-full p-0.5">call</span>
+                            ${escapeHtml(data.phone || '-')}
+                        </a>
+                    </div>
+                </td>
+                <td class="p-4 text-sm text-[#1c180d]/60 dark:text-white/60 text-xs whitespace-nowrap">
+                    ${dateStr}
+                </td>
+                <td class="p-4 text-center">
+                    <button onclick="deleteGuest('${id}')" class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-white/10 p-2 rounded-full transition-colors" title="Hapus Data">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tableBody.innerHTML = html;
+    totalCountEl.innerText = filteredCountGuests;
 }
 
 function escapeHtml(text) {
@@ -156,7 +244,7 @@ window.deleteGuest = function (id) {
         window.db.collection('registrations').doc(id).delete()
             .then(() => {
                 console.log("Document successfully deleted!");
-                // No need to reload, onSnapshot will handle it
+                // onSnapshot will auto refresh
             }).catch((error) => {
                 console.error("Error removing document: ", error);
                 alert("Gagal menghapus data: " + error.message);

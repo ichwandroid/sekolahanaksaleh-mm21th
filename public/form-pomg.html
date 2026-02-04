@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Milad Meriah 21th - Pendaftaran KB TK ANAK SALEH</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f78dbb",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221d10",
+                        "accent-teal": "#8FBAB2",
+                        "secondary": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Epilogue", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .geometric-bg {
+            background-color: transparent;
+            background-image: radial-gradient(#f78dbb 0.5px, transparent 0.5px), radial-gradient(#f78dbb 0.5px, #f8f7f5 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.1;
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .dark .geometric-bg {
+            background-image: radial-gradient(#f78dbb 0.5px, transparent 0.5px), radial-gradient(#f78dbb 0.5px, #f78dbb 0.5px);
+            opacity: 0.05;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="font-display bg-background-light dark:bg-background-dark text-[#1c180d] dark:text-white transition-colors duration-300">
+    <div class="relative z-10 min-h-screen flex flex-col max-w-md mx-auto overflow-x-hidden shadow-2xl">
+        <div class="geometric-bg"></div>
+        <!-- TopAppBar -->
+        <header
+            class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-black/5 dark:border-white/5">
+            <h2
+                class="text-[#1c180d] dark:text-white text-base font-bold leading-tight tracking-tight flex-1 text-center">
+                Pendaftaran KB TK ANAK SALEH</h2>
+            <div class="flex w-10 items-center justify-end">
+                <button id="share-button"
+                    class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1c180d] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">share</span>
+                </button>
+            </div>
+        </header>
+        <main class="flex-1 pb-32">
+            <!-- HeaderImage / Banner -->
+            <div class="px-4 py-4">
+                <div class="relative bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-xl min-h-[340px] shadow-lg group"
+                    data-alt="Happy families celebrating together at an outdoor event"
+                    style='background-image: linear-gradient(0deg, rgba(241, 143, 245, 0.7) 0%, rgba(0, 0, 0, 0) 50%), url("assets/image 2.png");'>
+                </div>
+            </div>
+            <!-- HeadlineText -->
+            <div class="px-4 text-center">
+                <h2 class="text-[#1c180d] dark:text-white tracking-tight text-2xl font-bold leading-tight pb-2 pt-4">
+                    Pendaftaran KB TK</h2>
+                <p class="text-sm text-[#1c180d]/60 dark:text-white/60 max-w-xs mx-auto">
+                    Formulir pendaftaran<br> khusus untuk KB TK ANAK SALEH.</p>
+            </div>
+
+            <!-- Rundown Acara -->
+            <div class="px-4 space-y-4 mb-8 mt-6">
+                <h3 class="text-lg font-bold px-1 flex items-center gap-2">
+                    <span class="size-2 bg-primary rounded-full"></span>
+                    Informasi Acara
+                </h3>
+
+                <div class="relative pl-4 border-l-2 border-dashed border-primary/20 space-y-6 my-2 ml-2">
+
+                    <!-- Smart Edu-Parenting -->
+                    <div class="relative group">
+                        <div
+                            class="absolute -left-[21px] top-3 size-4 rounded-full bg-primary border-4 border-[#f8f7f5] dark:border-[#221d10] shadow-sm">
+                        </div>
+                        <div
+                            class="ml-4 bg-white dark:bg-[#2c2618] p-4 rounded-2xl shadow-sm border border-black/5 dark:border-white/5 hover:border-primary/30 transition-colors">
+                            <span
+                                class="inline-block px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-2">
+                                14 Februari 2026
+                            </span>
+                            <h4 class="text-[#1c180d] dark:text-white font-bold text-base leading-tight">Puncak Milad 21
+                                Tahun</h4>
+                            <p class="text-xs text-[#1c180d]/60 dark:text-white/60 mt-1">Smart Edu-Parenting & Ramah
+                                Tamah.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Location Details -->
+            <div class="px-4 mt-8">
+                <div class="rounded-2xl overflow-hidden bg-white dark:bg-[#2c2618] shadow-sm border border-black/5">
+                    <div class="h-32 w-full bg-[#f4f0e7] relative">
+                        <iframe width="100%" height="100%" frameborder="0" style="border:0"
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1975.717835927711!2d112.6154547!3d-7.9538486!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7883b162900545%3A0x661e5c20aa7727be!2sGedung%20G%20FILKOM%20UB!5e0!3m2!1sid!2sid!4v1768790924525!5m2!1sid!2sid"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <a href="https://maps.app.goo.gl/Xyfisw2VX8ZwAKfRA" target="_blank"
+                        class="block p-4 flex flex-col gap-1 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                        <p class="text-[#1c180d] dark:text-white text-sm font-bold flex items-center gap-1">
+                            Auditorium Algoritma
+                            <span class="material-symbols-outlined text-xs text-primary">open_in_new</span>
+                        </p>
+                        <p class="text-[#1c180d]/60 dark:text-white/60 text-xs">Gedung G lantai 2 Fakultas Ilmu Komputer
+                            Universitas Brawijaya Malang</p>
+                    </a>
+                </div>
+            </div>
+        </main>
+        <!-- Floating Registration CTA -->
+        <div
+            class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/95 dark:via-background-dark/95 to-transparent z-[100]">
+            <div class="max-w-md mx-auto">
+                <button id="btn-register-cta"
+                    class="w-full h-14 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-base rounded-2xl shadow-lg shadow-primary/20 flex items-center justify-center gap-3 transition-transform active:scale-95">
+                    <span class="material-symbols-outlined">how_to_reg</span>
+                    Daftar Sekarang
+                </button>
+                <p
+                    class="text-center text-[10px] text-[#1c180d]/40 dark:text-white/40 mt-3 font-medium uppercase tracking-widest">
+                    Tempat Terbatas • Daftar sebelum 13 Februari 2026</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/gsap-animations.js"></script>
+
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 z-[200] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="alert-backdrop">
+        </div>
+        <!-- Modal Panel -->
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-[#2c2618] rounded-3xl p-6 shadow-2xl w-full max-w-sm transform opacity-0 scale-95 transition-all duration-300 pointer-events-auto flex flex-col items-center text-center gap-4 border border-black/5 dark:border-white/5"
+                id="alert-panel">
+                <div id="alert-icon-wrapper" class="p-4 rounded-full bg-primary/10 mb-2">
+                    <span id="alert-icon" class="material-symbols-outlined text-4xl text-primary">info</span>
+                </div>
+                <div class="space-y-2">
+                    <h3 id="alert-title" class="text-xl font-bold text-[#1c180d] dark:text-white leading-tight">Title
+                    </h3>
+                    <p id="alert-message" class="text-sm text-[#1c180d]/60 dark:text-white/60 leading-relaxed">Message
+                        goes here.</p>
+                </div>
+                <button id="btn-close-alert"
+                    class="w-full py-3 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-sm rounded-xl transition-transform active:scale-95 shadow-lg shadow-primary/20">
+                    Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="fixed inset-0 z-[150] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop">
+        </div>
+
+        <!-- Modal Content -->
+        <div
+            class="absolute inset-x-4 bottom-4 md:inset-0 md:flex md:items-center md:justify-center pointer-events-none">
+            <div class="bg-white dark:bg-[#2c2618] rounded-3xl p-6 shadow-2xl w-full max-w-md mx-auto transform translate-y-full md:translate-y-10 opacity-0 transition-all duration-300 pointer-events-auto"
+                id="modal-panel">
+
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-[#1c180d] dark:text-white">Formulir Pendaftaran</h3>
+                        <p class="text-xs text-[#1c180d]/60 dark:text-white/60">Isi data untuk mendaftar.</p>
+                    </div>
+                    <button id="btn-close-modal"
+                        class="size-8 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-[#1c180d] dark:text-white transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+
+                <form id="registration-form" class="space-y-4">
+                    <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+
+                        <div class="space-y-1">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
+                                Peserta</label>
+                            <input type="text" name="participant_name" required placeholder="Nama Lengkap"
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">WhatsApp</label>
+                                <input type="tel" name="phone" required placeholder="62..."
+                                    class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label
+                                    class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Email</label>
+                                <input type="email" name="email" required placeholder="email@..."
+                                    class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <button type="submit" id="btn-submit-registration"
+                        class="w-full h-12 mt-4 bg-primary hover:bg-primary/90 text-[#1c180d] font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 disabled:opacity-70">
+                        <span>Daftar</span>
+                        <span class="material-symbols-outlined text-lg">check_circle</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/form-pomg.js"></script>
+    <script src="js/three-bg.js"></script>
+    <script>
+        document.getElementById('share-button').addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Milad Meriah 21th - Pendaftaran KB TK ANAK SALEH',
+                    text: 'Formulir pendaftaran khusus untuk KB TK ANAK SALEH',
+                    url: window.location.href
+                })
+            } else {
+                if (window.showCustomAlert) {
+                    window.showCustomAlert('Info', 'Fitur Share tidak didukung pada browser ini.', 'info');
+                } else {
+                    alert('Share not supported');
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
