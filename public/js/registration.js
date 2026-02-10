@@ -364,7 +364,7 @@ window.STUDENTS_DATA = {
         { name: "Nasyitha Naufalyn Najiyah", homebase: "Kuning" },
         { name: "Nurus Shidqiya Sajidah", homebase: "Merah" },
         { name: "Panji Naufal Ramadhanis", homebase: "Hijau" },
-        { name: "Rasyifa Mutiara Haq", homebase: "Kuning" },
+        { name: "Rasyifa Mutiara Haq", homebase: "Ungu" },
         { name: "Retno Ayu Purbaningrum Titis Pramana", homebase: "Ungu" },
         { name: "Richelle Fredelin Aquina Wijaya", homebase: "Ungu" },
         { name: "Rois Gholin Al-Isyqy", homebase: "Kuning" },
@@ -548,6 +548,7 @@ window.STUDENTS_DATA = {
         { name: "Yafiq Althaf Achmad", homebase: "Merah" },
     ].sort((a, b) => (typeof a === 'string' ? a : a.name).localeCompare(typeof b === 'string' ? b : b.name)),
     "5B": [
+        { name: "Abimanyu Gemaputra Retansyah", homebase: "Biru" },
         { name: "Ahmad Averroes Hakky", homebase: "Ungu" },
         { name: "Ahmad Zein Al Falah", homebase: "Kuning" },
         { name: "Alaric Shabaz Pravistara", homebase: "Hijau" },
