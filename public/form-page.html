@@ -253,12 +253,48 @@
 
                         <div class="space-y-1">
                             <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Konfirmasi
+                                Kehadiran Kepala Sekolah</label>
+                            <div
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 flex items-center justify-between transition-colors focus-within:ring-2 focus-within:ring-primary">
+                                <span id="ks_status_display"
+                                    class="text-[#1c180d] dark:text-white font-bold text-sm">Hadir</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="toggle_ks_status" checked class="sr-only peer" onchange="
+                                        const display = document.getElementById('ks_status_display');
+                                        const hidden = document.getElementById('headmaster_status_hidden');
+                                        if (this.checked) {
+                                            display.textContent = 'Hadir';
+                                            display.classList.remove('opacity-50');
+                                            hidden.value = 'Hadir';
+                                        } else {
+                                            display.textContent = 'Tidak Hadir';
+                                            display.classList.add('opacity-50');
+                                            hidden.value = 'Tidak Hadir';
+                                        }
+                                    ">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                                    </div>
+                                </label>
+                            </div>
+                            <input type="hidden" name="headmaster_status" id="headmaster_status_hidden" value="Hadir">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
-                                Guru Pendamping</label>
+                                Guru yang Hadir 1</label>
                             <input type="text" name="teacher_name" placeholder="Nama Lengkap Guru (Opsional)"
                                 class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
-                            <p class="text-[10px] text-[#1c180d]/40 dark:text-white/40 ml-1 italic">Hanya 1 Guru
-                                Pendamping</p>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label
+                                class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
+                                Guru yang Hadir 2</label>
+                            <input type="text" name="teacher_name_2" placeholder="Nama Lengkap Guru 2 (Opsional)"
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
                         </div>
 
 

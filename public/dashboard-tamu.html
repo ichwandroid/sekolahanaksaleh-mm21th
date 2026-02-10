@@ -99,6 +99,9 @@
                                     class="p-5 text-xs font-extra-bold uppercase tracking-wider text-[#1c180d]/50 dark:text-white/50 min-w-[180px]">
                                     Kepala Sekolah / Guru</th>
                                 <th
+                                    class="p-5 text-xs font-extra-bold uppercase tracking-wider text-[#1c180d]/50 dark:text-white/50 w-24 text-center">
+                                    Status KS</th>
+                                <th
                                     class="p-5 text-xs font-extra-bold uppercase tracking-wider text-[#1c180d]/50 dark:text-white/50 min-w-[180px]">
                                     Guru Pendamping</th>
                                 <th
@@ -131,6 +134,18 @@
                                             class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-[#1c180d]/30 dark:text-white/30">search</span>
                                         <input type="text" id="filter-person" placeholder="Cari Nama..."
                                             class="w-full pl-9 pr-3 py-2 text-sm rounded-xl bg-gray-50 dark:bg-white/5 border-0 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary/50 transition-shadow">
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3">
+                                    <div class="relative">
+                                        <select id="filter-status"
+                                            class="w-full pl-3 pr-8 py-2 text-sm rounded-xl bg-gray-50 dark:bg-white/5 border-0 text-[#1c180d] dark:text-white focus:ring-2 focus:ring-primary/50 transition-shadow appearance-none cursor-pointer">
+                                            <option value="">Semua</option>
+                                            <option value="Hadir">Hadir</option>
+                                            <option value="Tidak Hadir">Tidak</option>
+                                        </select>
+                                        <span
+                                            class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[18px] text-[#1c180d]/30 dark:text-white/30 pointer-events-none">expand_more</span>
                                     </div>
                                 </th>
                                 <th class="px-4 py-3">

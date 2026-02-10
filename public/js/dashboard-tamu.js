@@ -24,7 +24,7 @@ function initDashboard() {
     }
 
     // Setup Filter Listeners
-    ['filter-school', 'filter-person', 'filter-attendee', 'filter-contact'].forEach(id => {
+    ['filter-school', 'filter-person', 'filter-status', 'filter-attendee', 'filter-contact'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
             el.addEventListener('input', () => renderTable());
@@ -86,6 +86,7 @@ function renderTable() {
     // Get Filter Values
     const fSchool = document.getElementById('filter-school').value.toLowerCase();
     const fPerson = document.getElementById('filter-person').value.toLowerCase();
+    const fStatus = document.getElementById('filter-status').value.toLowerCase();
     const fAttendee = document.getElementById('filter-attendee').value.toLowerCase();
     const fContact = document.getElementById('filter-contact').value.toLowerCase();
 
@@ -100,14 +101,16 @@ function renderTable() {
         let displayPerson = isKBTK ? (data.child_name || data.participant_name || '-') : (data.parent_name || '-');
         let displayAttendee = isKBTK ? '-' : (data.attendees || '-');
         let displayPhone = data.phone || '';
+        let displayStatus = data.headmaster_status || '';
 
         // Check inclusion
         const matchSchool = displaySchool.toLowerCase().includes(fSchool);
         const matchPerson = displayPerson.toLowerCase().includes(fPerson);
+        const matchStatus = fStatus === '' || displayStatus.toLowerCase() === fStatus;
         const matchAttendee = displayAttendee.toLowerCase().includes(fAttendee);
         const matchContact = displayPhone.toLowerCase().includes(fContact);
 
-        return matchSchool && matchPerson && matchAttendee && matchContact;
+        return matchSchool && matchPerson && matchStatus && matchAttendee && matchContact;
     });
 
     if (filteredData.length === 0) {
@@ -165,8 +168,17 @@ function renderTable() {
         if (isKBTK) {
             guestsInRow = 1;
         } else {
-            if (data.parent_name && data.parent_name !== '-') guestsInRow++;
-            if (data.attendees && data.attendees.trim() !== '-' && data.attendees.trim() !== '') guestsInRow++;
+            // Count Headmaster ONLY if status is 'Hadir' and name exists
+            if (data.parent_name && data.parent_name !== '-' && (data.headmaster_status === 'Hadir')) {
+                guestsInRow++;
+            }
+
+            // Count Teachers (Attendees)
+            if (data.attendees && data.attendees.trim() !== '-' && data.attendees.trim() !== '') {
+                // Split by comma to count multiple teachers
+                const teachers = data.attendees.split(',').filter(t => t.trim() !== '');
+                guestsInRow += teachers.length;
+            }
         }
         filteredCountGuests += guestsInRow;
 
@@ -194,6 +206,21 @@ function renderTable() {
                 </td>
                 <td class="p-4 text-sm text-[#1c180d] dark:text-white capitalize">
                     ${escapeHtml(displayPerson)}
+                </td>
+                <td class="p-4 text-center">
+                    ${(() => {
+                const status = data.headmaster_status || '-';
+                let badgeClass = 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/60';
+                if (status === 'Hadir') {
+                    badgeClass = 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+                } else if (status === 'Tidak Hadir') {
+                    badgeClass = 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+                }
+                return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeClass}">
+                                ${escapeHtml(status)}
+                            </span>`;
+            })()
+            }
                 </td>
                 <td class="p-4 text-sm text-[#1c180d] dark:text-white capitalize">
                     ${escapeHtml(displayAttendee)}

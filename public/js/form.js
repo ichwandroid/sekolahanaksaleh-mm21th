@@ -167,16 +167,22 @@ window.initForm = function () {
                 // Mapping fields for KS & Guru
                 const schoolName = formData.get('school_name');
                 const headmasterName = formData.get('headmaster_name');
-                const teacherName = formData.get('teacher_name');
-                const attendeesString = teacherName ? teacherName : '';
+                const headmasterStatus = formData.get('headmaster_status');
+                const teacherName1 = formData.get('teacher_name');
+                const teacherName2 = formData.get('teacher_name_2');
+
+                let attendeesList = [];
+                if (teacherName1) attendeesList.push(teacherName1);
+                if (teacherName2) attendeesList.push(teacherName2);
+                const attendeesString = attendeesList.join(', ');
 
                 const data = {
                     parent_name: headmasterName, // Storing Headmaster Name as Parent Name (Main Contact)
                     child_name: schoolName, // Storing School Name as Child Name
-                    child_name: schoolName, // Storing School Name as Child Name
                     phone: formData.get('phone'),
                     email: formData.get('email'),
                     attendees: attendeesString, // Storing Teacher Name in Attendees
+                    headmaster_status: headmasterStatus,
                     infaq_status: 'no',
                     payment_method: '-',
                     proof_url: '',
@@ -201,7 +207,7 @@ window.initForm = function () {
                             id: registrationId,
                             school_name: schoolName,
                             headmaster_name: headmasterName,
-                            teacher_name: teacherName,
+                            teacher_name: attendeesString,
                             phone: data.phone,
                             email: data.email,
                             date: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
