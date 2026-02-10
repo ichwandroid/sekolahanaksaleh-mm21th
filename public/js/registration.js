@@ -1469,7 +1469,7 @@ async function generateTicket(data, proofImgUrl) {
     y += 40;
     ctx.fillStyle = '#1c180d';
     ctx.font = 'bold 30px sans-serif';
-    ctx.fillText('BUKTI INFAQ', x, y);
+    // ctx.fillText('BUKTI INFAQ', x, y);
     y += 20;
     // Line separator
     ctx.beginPath();
@@ -1510,7 +1510,7 @@ async function generateTicket(data, proofImgUrl) {
         } catch (e) {
             ctx.fillStyle = '#888888';
             ctx.font = 'italic 20px sans-serif';
-            ctx.fillText('(Gambar tidak dapat dimuat)', x, y + 30);
+            // ctx.fillText('(Gambar tidak dapat dimuat)', x, y + 30);
         }
     } else {
         ctx.fillStyle = '#888888';
