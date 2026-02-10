@@ -377,15 +377,73 @@ function updateStats() {
 
 // Filter Logic
 function getFilteredData() {
-    if (currentFilter === 'all') return allRegistrations;
-    if (currentFilter === 'verified') return allRegistrations.filter(r => r.payment_status === 'verified');
-    if (currentFilter === 'pending') return allRegistrations.filter(r => !r.payment_status || r.payment_status === 'pending');
-    if (currentFilter === 'attendance') return allRegistrations.filter(r => r.attendees && r.attendees.trim().length > 0);
-    if (currentFilter === 'infaq') return allRegistrations.filter(r => r.nominal && Number(r.nominal) > 0);
-    return allRegistrations;
+    let data = allRegistrations;
+
+    // 1. Status Filter (Tabs)
+    if (currentFilter === 'verified') data = data.filter(r => r.payment_status === 'verified');
+    else if (currentFilter === 'pending') data = data.filter(r => !r.payment_status || r.payment_status === 'pending');
+    else if (currentFilter === 'infaq') data = data.filter(r => r.nominal && Number(r.nominal) > 0);
+
+    // 2. Class Filter
+    const classVal = document.getElementById('class-filter').value;
+    if (classVal) {
+        // Check if ANY child in the registration belongs to the selected class
+        // Format: "Name (Class)"
+        data = data.filter(r => (r.child_name || '').includes(`(${classVal})`));
+    }
+
+    // 3. Search Filter
+    const term = searchInput.value.toLowerCase();
+    if (term) {
+        data = data.filter(row =>
+            (row.parent_name || '').toLowerCase().includes(term) ||
+            (row.child_name || '').toLowerCase().includes(term) ||
+            (row.phone || '').includes(term) ||
+            (row.email || '').toLowerCase().includes(term)
+        );
+    }
+
+    return data;
 }
 
-// Filter Buttons
+// Populate Class Filter
+function populateClassFilter() {
+    const classFilter = document.getElementById('class-filter');
+    const uniqueClasses = new Set();
+
+    allRegistrations.forEach(row => {
+        if (row.child_name) {
+            // Extract classes from "Name (Class), Name (Class)"
+            const matches = row.child_name.match(/\((.*?)\)/g);
+            if (matches) {
+                matches.forEach(m => {
+                    // Remove parens
+                    const cls = m.replace(/[()]/g, '').trim();
+                    if (cls) uniqueClasses.add(cls);
+                });
+            }
+        }
+    });
+
+    const sortedClasses = Array.from(uniqueClasses).sort();
+
+    // Preserve existing selection if possible
+    const currentVal = classFilter.value;
+
+    classFilter.innerHTML = '<option value="">All Classes</option>';
+    sortedClasses.forEach(cls => {
+        const option = document.createElement('option');
+        option.value = cls;
+        option.textContent = cls;
+        classFilter.appendChild(option);
+    });
+
+    if (uniqueClasses.has(currentVal)) {
+        classFilter.value = currentVal;
+    }
+}
+
+// Filter Event Listeners
 document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         document.querySelectorAll('.filter-btn').forEach(b => {
@@ -398,6 +456,14 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
         currentFilter = e.target.dataset.filter;
         renderTable(getFilteredData());
     });
+});
+
+document.getElementById('class-filter').addEventListener('change', () => {
+    renderTable(getFilteredData());
+});
+
+searchInput.addEventListener('input', () => {
+    renderTable(getFilteredData());
 });
 
 // Fetch Data
@@ -421,6 +487,7 @@ async function fetchRegistrations() {
 
         allRegistrations = data || [];
         updateStats();
+        populateClassFilter(); // Populate class filter
         renderCharts(allRegistrations);
         renderTable(allRegistrations);
 
@@ -735,16 +802,7 @@ if (exportBtn) {
 }
 
 // Search Functionality
-searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    const filtered = allRegistrations.filter(row =>
-        (row.parent_name || '').toLowerCase().includes(term) ||
-        (row.child_name || '').toLowerCase().includes(term) ||
-        (row.phone || '').includes(term) ||
-        (row.email || '').toLowerCase().includes(term)
-    );
-    renderTable(filtered);
-});
+// Search listener removed (moved to top)
 
 // Image Preview Helper (Global)
 window.previewImage = (url) => {

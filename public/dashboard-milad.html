@@ -163,11 +163,18 @@
             <div class="p-4 border-b border-black/5 dark:border-white/5">
                 <div class="flex gap-4 items-center justify-between mb-4">
                     <h3 class="font-bold text-lg">Recent Registrations</h3>
-                    <div class="relative w-64">
-                        <span
-                            class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#1c180d]/40 text-lg">search</span>
-                        <input type="text" id="search-input" placeholder="Search name..."
-                            class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl pl-10 py-2 text-sm focus:ring-2 focus:ring-primary">
+                    <div class="flex gap-2">
+                        <select id="class-filter"
+                            class="bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl py-2 pl-3 pr-8 text-sm focus:ring-2 focus:ring-primary cursor-pointer min-w-[120px]">
+                            <option value="">All Classes</option>
+                            <!-- Populated by JS -->
+                        </select>
+                        <div class="relative w-64">
+                            <span
+                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#1c180d]/40 text-lg">search</span>
+                            <input type="text" id="search-input" placeholder="Search name..."
+                                class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl pl-10 py-2 text-sm focus:ring-2 focus:ring-primary">
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-2">

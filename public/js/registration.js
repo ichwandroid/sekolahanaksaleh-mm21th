@@ -364,6 +364,7 @@ window.STUDENTS_DATA = {
         { name: "Nasyitha Naufalyn Najiyah", homebase: "Kuning" },
         { name: "Nurus Shidqiya Sajidah", homebase: "Merah" },
         { name: "Panji Naufal Ramadhanis", homebase: "Hijau" },
+        { name: "Rasyifa Mutiara Haq", homebase: "Kuning" },
         { name: "Retno Ayu Purbaningrum Titis Pramana", homebase: "Ungu" },
         { name: "Richelle Fredelin Aquina Wijaya", homebase: "Ungu" },
         { name: "Rois Gholin Al-Isyqy", homebase: "Kuning" },
