@@ -263,14 +263,17 @@
                                     <input type="checkbox" id="toggle_ks_status" checked class="sr-only peer" onchange="
                                         const display = document.getElementById('ks_status_display');
                                         const hidden = document.getElementById('headmaster_status_hidden');
+                                        const teacher2 = document.getElementById('teacher_2_container');
                                         if (this.checked) {
                                             display.textContent = 'Hadir';
                                             display.classList.remove('opacity-50');
                                             hidden.value = 'Hadir';
+                                            if(teacher2) teacher2.hidden = true;
                                         } else {
                                             display.textContent = 'Tidak Hadir';
                                             display.classList.add('opacity-50');
                                             hidden.value = 'Tidak Hadir';
+                                            if(teacher2) teacher2.hidden = false;
                                         }
                                     ">
                                     <div
@@ -289,7 +292,7 @@
                                 class="w-full bg-[#f8f7f5] dark:bg-[#221d10] border-0 rounded-xl px-4 py-3 text-[#1c180d] dark:text-white placeholder:text-[#1c180d]/30 dark:placeholder:text-white/30 focus:ring-2 focus:ring-primary">
                         </div>
 
-                        <div class="space-y-1">
+                        <div class="space-y-1" hidden id="teacher_2_container">
                             <label
                                 class="text-xs font-bold uppercase tracking-wider text-[#1c180d]/60 dark:text-white/60 ml-1">Nama
                                 Guru yang Hadir 2</label>
